@@ -11,7 +11,7 @@
 #include "Lattice.hpp"
 
 /**
- * @brief Spin model representation. 
+ * @brief 自旋模型表示. 
  * @details A spin model represents the set of two-spin interactions in the Hamiltonian. 
  * The initial conditions of the pf-FRG flow depend on these couplings. 
  * The SpinModel object is therefore passed to the initialization of the EffectiveAction object. 

@@ -48,7 +48,7 @@ struct Fileset
 };
 
 /**
- * @brief Principal object and interface for the solution of pf-FRG flow equations. 
+ * @brief pf-FRG流动方程求解的主要对象和接口. 
  * @details The SpinParser object provides the central interface for the solution of pf-FRG flow equations. 
  * It is designed to be a singleton, which is automatically created and retrieved via the SpinParser::spinParser() function. 
  * The solution of flow equations is then launched via the SpinParser::run() function, which is provided with the launch parameters argc and argv.

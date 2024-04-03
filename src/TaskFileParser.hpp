@@ -18,87 +18,87 @@ struct ComputationStatus;
 class FrgCore;
 
 /**
- * @brief Task file parser routine. The object is bound to a single task file, which it initially reads and parses, and can thereafter write to. 
+ * @brief 任务文件解析器例程.该对象绑定到单个任务文件,最初读取并解析该文件,随后可以对其进行写入操作
  */
 class TaskFileParser
 {
 public:
 	/**
-	 * @brief Construct a new TaskFileParser object and parse the specified task file. 
-	 * @details During the parsing process, the TaskFileParser will allocate and initialize (with parameters as specified in the task file) FrequencyDiscretization, CutoffDiscretization, and Lattice objects; 
-	 * The pointers to those objects are stored in frequency, cutoff, and lattice, respectively. 
-	 * Furthermore, it allocates the FrgCore (including the FrgCore::measurements) specified in the task file and writes it to frgCore. 
-	 * The computation status associated with the task file is also returned. 
+	 * @brief 构造一个新的TaskFileParser对象并解析指定的任务文件。
+	 * @details 在解析过程中,TaskFileParser将分配和初始化（使用任务文件中指定的参数）FrequencyDiscretization、CutoffDiscretization和Lattice对象；
+	 * 将这些对象的指针分别存储在frequency、cutoff和lattice中。
+	 * 此外,它还分配了任务文件中指定的FrgCore（包括FrgCore::measurements）,并将其写入frgCore。
+	 * 还返回与任务文件相关联的计算状态。
 	 * 
-	 * @param[in] taskFilePath Path to the task file to be parsed. 
-	 * @param[out] frequency Newly generated FrequencyDiscretization. 
-	 * @param[out] cutoff Newly generated CutoffDiscretization. 
-	 * @param[out] lattice Newly generated Lattice. 
-	 * @param[out] frgCore Newly generated FRG core. 
-	 * @param[out] computationStatus Computation status of the task associated with the task file. 
+	 * @param[in] taskFilePath 要解析的任务文件的路径,使用 const 固定.
+	 * @param[out] frequency 新生成的FrequencyDiscretization(频率离散化)
+	 * @param[out] cutoff 新生成的CutoffDiscretization(截断离散化)
+	 * @param[out] lattice 新生成的Lattice(晶格)
+	 * @param[out] frgCore 新生成的FRG核心
+	 * @param[out] computationStatus 与任务文件相关联的计算状态。
 	 */
 	TaskFileParser(const std::string &taskFilePath, FrequencyDiscretization *&frequency, CutoffDiscretization *&cutoff, Lattice *&lattice, FrgCore *&frgCore, ComputationStatus &computationStatus);
 
 	/**
-	 * @brief Write calculation status to the task file. 
+	 * @brief 将计算状态写入任务文件. 
 	 * 
-	 * @param finalize If set to true, the task status will be set to 'finished'.
-	 * @param updateCheckpoint If set to true, the last checkpoint time will be set to the current time. 
+	 * @param finalize 如果设置为true,则将任务状态设置为'finished'. 判断任务是否完成
+	 * @param updateCheckpoint 如果设置为true,则最后一个检查点时间将设置为当前时间. 更新检查点.
 	 */
 	void writeTaskFile(const ComputationStatus &computationStatus);
 
 protected: 
 	/**
-	 * @brief Ensure that a given property tree contains a specific node with only known required or optional elements. Throw an Exception::Type::InitializationError if the requirements are not fulfilled.
+	 * @brief 确保给定的属性树包含具有已知的必需或可选元素的特定节点.如果要求未满足,则抛出Exception::Type::InitializationError
 	 * 
-	 * @param tree Property tree to test. 
-	 * @param node Node to test. 
-	 * @param requiredChildren List of required children of the node. 
-	 * @param requiredAttributes List of required attributes of the node. 
-	 * @param optionalChildren List of optional children of the node. 
-	 * @param optionalAttributes List of optional attributes of the node.
+	 * @param tree 要测试的属性树. 
+	 * @param node 要测试的节点. 
+	 * @param requiredChildren 节点的必需子项列表. 
+	 * @param requiredAttributes 节点的必需属性列表. 
+	 * @param optionalChildren 节点的可选子项列表,默认为空. 
+	 * @param optionalAttributes  节点的可选属性列表,默认为空.
 	 */
 	void _validateProperties(const boost::property_tree::ptree &tree, const std::string &node, const std::set<std::string> &requiredChildren, const std::set<std::string> &requiredAttributes, const std::set<std::string> &optionalChildren = {}, const std::set<std::string> &optionalAttributes = {}) const;
 
 	/**
-	 * @brief Ensure that a given property tree contains a specific node and test that the node contains a list of required children. Throw an Exception::Type::InitializationError if the requirements are not fulfilled.
+	 * @brief 确保给定的属性树包含特定节点,并测试该节点是否包含所需子项的列表.如果不满足要求,则引发 Exception::Type::InitializationError。
 	 * 
-	 * @param tree Property tree to test. 
-	 * @param node Node to test. 
-	 * @param requiredChildren List of required children of the node. 
-	 * @param treePath Property path, which is prepended to the node name in a potential exception thrown.  
+	 * @param tree 要测试的属性树. 
+	 * @param node 要测试的节点. 
+	 * @param requiredChildren 节点所需的子节点列表. 
+	 * @param treePath 属性路径,在可能会在抛出的异常中作为节点名称的前缀.  
 	 */
 	void _validateRequiredChildren(const boost::property_tree::ptree &tree, const std::string &node, const std::set<std::string> &requiredChildren, const std::string &treePath = "") const;
 	
 	/**
-	 * @brief Ensure that a given property tree contains a specific node and test that the node contains a list of required attributes. Throw an Exception::Type::InitializationError if the requirements are not fulfilled.
+	 * @brief 确保给定的属性树包含特定节点，并测试该节点是否包含必需属性的列表。如果不满足要求，则引发 Exception::Type::InitializationError.
 	 * 
-	 * @param tree Property tree to test. 
-	 * @param node Node to test. 
-	 * @param requiredAttributes List of required attributes of the node. 
-	 * @param treePath Property path, which is prepended to the node name in a potential exception thrown.  
+	 * @param tree 要测试的属性树. 
+	 * @param node 要测试的节点. 
+	 * @param requiredAttributes 节点必需属性列表. 
+	 * @param treePath 属性路径,在可能会在抛出的异常中作为节点名称的前缀.  
 	 */
 	void _validateRequiredAttributes(const boost::property_tree::ptree &tree, const std::string &node, const std::set<std::string> &requiredAttributes, const std::string &treePath = "") const;
 	
 	/**
-	 * @brief Ensure that a given property tree contains a specific node and test that the node contains only children from a list of optional values. Throw an Exception::Type::InitializationError if the requirements are not fulfilled.
+	 * @brief 确保给定的属性树包含特定节点，并测试该节点是否仅包含可选值列表中的子项。如果不满足要求，则引发 Exception::Type::InitializationError.
 	 * 
-	 * @param tree Property tree to test. 
-	 * @param node Node to test. 
-	 * @param optionalChildren List of optional children of the node. 
-	 * @param treePath Property path, which is prepended to the node name in a potential exception thrown.  
+	 * @param tree 要测试的属性树. 
+	 * @param node 要测试的节点. 
+	 * @param optionalChildren 节点的可选子节点列表. 
+	 * @param treePath 属性路径,在可能会在抛出的异常中作为节点名称的前缀.  
 	 */
 	void _validateOptionalChildren(const boost::property_tree::ptree &tree, const std::string &node, const std::set<std::string> &optionalChildren, const std::string &treePath = "") const;
 	
 	/**
-	 * @brief Ensure that a given property tree contains a specific node and test that the node contains only attributes from a list of optional values. Throw an Exception::Type::InitializationError if the requirements are not fulfilled.
+	 * @brief 确保给定的属性树包含特定节点，并测试该节点是否仅包含可选值列表中的属性。如果不满足要求，则引发 Exception::Type::InitializationError.
 	 * 
-	 * @param tree Property tree to test. 
-	 * @param node Node to test. 
-	 * @param optionalAttributes List of optional attributes of the node. 
-	 * @param treePath Property path, which is prepended to the node name in a potential exception thrown.  
+	 * @param tree 要测试的属性树. 
+	 * @param node 要测试的节点. 
+	 * @param optionalAttributes 节点的可选属性列表. 
+	 * @param treePath 属性路径,在可能会在抛出的异常中作为节点名称的前缀.  
 	 */
 	void _validateOptionalAttributes(const boost::property_tree::ptree &tree, const std::string &node, const std::set<std::string> &optionalAttributes, const std::string &treePath = "") const;
 
-	boost::property_tree::ptree _taskFile; ///< Internal property tree representation of the parsed task file. 
+	boost::property_tree::ptree _taskFile; ///< 分析任务文件的内部属性树表示形式. 
 };
