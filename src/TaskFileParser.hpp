@@ -24,7 +24,7 @@ class TaskFileParser
 {
 public:
 	/**
-	 * @brief 构造一个新的TaskFileParser对象并解析指定的任务文件。
+	 * @brief 构造一个新的TaskFileParser对象并解析指定的任务文件,对输入xml文件进行处理
 	 * @details 在解析过程中,TaskFileParser将分配和初始化（使用任务文件中指定的参数）FrequencyDiscretization、CutoffDiscretization和Lattice对象；
 	 * 将这些对象的指针分别存储在frequency、cutoff和lattice中。
 	 * 此外,它还分配了任务文件中指定的FrgCore（包括FrgCore::measurements）,并将其写入frgCore。

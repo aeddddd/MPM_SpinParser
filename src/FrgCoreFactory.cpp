@@ -2,7 +2,7 @@
  * @file FrgCoreFactory.cpp
  * @author Finn Lasse Buessen
  * @brief Factory function to create a new FrgCore. 
- * @details For the implementation of custom FrgCores, the FrgCoreFactory::newFrgCore routine should be extended such that it can recignize an identifier for the custom FrgCore and create an instance thereof accordingly. 
+ * @details 对于自定义 Frg Core 的实现，应该扩展 FrgCoreFactory::new FrgCore 例程，以便它可以重新识别自定义 FrgCore 的标识符并相应地创建其实例. 
  * 
  * @copyright Copyright (c) 2020
  */
@@ -24,24 +24,24 @@
 
 FrgCore *FrgCoreFactory::newFrgCore(const std::string &identifier, const SpinModel &model, const std::vector<MeasurementSpecification> &measurements, const std::map<std::string, std::string> &options)
 {
-	//create measurement objects
+	//创建测量对象
 	std::vector<Measurement *> measurementObjects;
 
 	for (auto specification : measurements)
 	{
-		//correlation measurement
+		//相关测量
 		if (specification.identifier == "correlation")
 		{
 			Measurement *m = nullptr;
 			if (identifier == "SU2") m = new SU2MeasurementCorrelation(specification.output, specification.minCutoff, specification.maxCutoff, specification.defer);
 			else if (identifier == "XYZ") m = new XYZMeasurementCorrelation(specification.output, specification.minCutoff, specification.maxCutoff, specification.defer);
 			else if (identifier == "TRI") m = new TRIMeasurementCorrelation(specification.output, specification.minCutoff, specification.maxCutoff, specification.defer);
-			else throw Exception(Exception::Type::InitializationError, "Measurement [correlation]: Unknown model symmetry '" + identifier + "'.");
+			else throw Exception(Exception::Type::InitializationError, "Measurement [correlation]: 未知模型对称性 '" + identifier + "'.");
 
 			Log::log << Log::LogLevel::Info << "Added measurement [correlation]." << Log::endl;
 			measurementObjects.push_back(m);
 		}
-		else throw Exception(Exception::Type::InitializationError, "Measurement: Unknown measurement type '" + identifier + "'.");
+		else throw Exception(Exception::Type::InitializationError, "Measurement: 未知测量类型 '" + identifier + "'.");
 
 	}
 

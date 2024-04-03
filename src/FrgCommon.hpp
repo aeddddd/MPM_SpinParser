@@ -12,16 +12,16 @@
 #include "Lattice.hpp"
 
 /**
- * @brief Hub for central objects in pf-FRG calculations.
+ * @brief pf-FRG 计算中中心对象的中心.
  */
 struct FrgCommon
 {
 	friend class SpinParser;
 public:
 	/**
-	 * @brief Retrieve the lattice representation. 
+	 * @brief 检索晶格表示. 
 	 * 
-	 * @return const Lattice& Lattice representation. 
+	 * @return const Lattice& 格子表示. 
 	 */
 	static const Lattice &lattice()
 	{
@@ -29,9 +29,9 @@ public:
 	}
 
 	/**
-	 * @brief Retrieve the Matsubara frequency discretization. 
+	 * @brief 检索松原频率离散化. 
 	 * 
-	 * @return const FrequencyDiscretization& Matsubara frequency discretization. 
+	 * @return const FrequencyDiscretization& 松原频率离散化. 
 	 */
 	static const FrequencyDiscretization &frequency()
 	{
@@ -39,9 +39,9 @@ public:
 	}
 
 	/**
-	 * @brief Retrieve the frequency cutoff discretization.
+	 * @brief 检索频率截止离散化.
 	 * 
-	 * @return const CutoffDiscretization& Frequency cutoff discretization. 
+	 * @return const CutoffDiscretization& 频率截止离散化. 
 	 */
 	static const CutoffDiscretization &cutoff()
 	{
@@ -49,7 +49,7 @@ public:
 	}
 
 private:
-	static Lattice *_lattice; ///< Lattice representation. 
-	static FrequencyDiscretization *_frequency; ///< Matsubara frequency discretization. 
-	static CutoffDiscretization *_cutoff; ///< Frequency cutoff discretization. 
+	static Lattice *_lattice; ///< 格子表示. 
+	static FrequencyDiscretization *_frequency; ///< 松原频率离散化. 
+	static CutoffDiscretization *_cutoff; ///< 频率截止离散化. 
 };

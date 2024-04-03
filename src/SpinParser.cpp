@@ -54,40 +54,40 @@ int SpinParser::run(int argc, char **argv)
 {
 	try
 	{
-		//read command line switches
+		//读取命令行开关
 		_commandLineOptions = new CommandLineOptions(argc, argv);
 
-		//stop program if help is requested
+		//如果设置了--help标志则中止程序
 		if (_commandLineOptions->help()) return 0;
 
-		//set up log level
+		//设置日志等级
 		if (_isMasterRank) Log::log << Log::setDisplayLogLevel(_commandLineOptions->verbose() ? Log::LogLevel::Debug : Log::LogLevel::Info);
 
-		//set up paths
+		//设置路径
 		_fileset.taskFile = _commandLineOptions->taskFile();
 		_fileset.obsFile = boost::filesystem::path(_fileset.taskFile).replace_extension("obs").string();
 		_fileset.dataFile = boost::filesystem::path(_fileset.taskFile).replace_extension("data").string();
 		_fileset.checkpointFile = boost::filesystem::path(_fileset.taskFile).replace_extension("checkpoint").string();
 
-		//set up FrgCore via TaskFileParser
+		//通过任务文件解析器设置 FrgCore
 		_taskFileParser = new TaskFileParser(_fileset.taskFile, FrgCommon::_frequency, FrgCommon::_cutoff, FrgCommon::_lattice, _frgCore, _computationStatus);
 
-		//stop program is only lattice debug output is requested
+		//停止程序仅请求点阵调试输出
 		if (_commandLineOptions->debugLattice())
 		{
-			Log::log << Log::LogLevel::Info << "Lattice debug output complete. Shutting down." << Log::endl;
+			Log::log << Log::LogLevel::Info << "晶格调试输出完成.正在关闭." << Log::endl;
 			return 0;
 		}
 
-		//run core
-		Log::log << Log::LogLevel::Info << "Launching FRG numerics core" << Log::endl;
+		//运行核心
+		Log::log << Log::LogLevel::Info << "启动 FRG 数字核心" << Log::endl;
 		boost::posix_time::ptime startTime = boost::posix_time::microsec_clock::local_time();
-		runCore();
-		Log::log << Log::LogLevel::Info << "Shutting down core. Computation took " << std::fixed << std::setprecision(2) << (boost::posix_time::microsec_clock::local_time() - startTime).total_microseconds() / 1000000.0 << " seconds. " << Log::endl;
+		runCore();//调用运行核心函数
+		Log::log << Log::LogLevel::Info << "关闭核心.计算时间 " << std::fixed << std::setprecision(2) << (boost::posix_time::microsec_clock::local_time() - startTime).total_microseconds() / 1000000.0 << " seconds. " << Log::endl;
 	}
 	catch (std::exception &e)
 	{
-		Log::log << Log::LogLevel::Error << "Caught exception: " << e.what() << Log::endl;
+		Log::log << Log::LogLevel::Error << "捕获异常: " << e.what() << Log::endl;
 		return 1;
 	}
 	return 0;
@@ -127,8 +127,8 @@ void SpinParser::runCore()
 {
 	if (_computationStatus.statusIdentifier == ComputationStatus::Identifier::New || _computationStatus.statusIdentifier == ComputationStatus::Identifier::Running)
 	{
-		//read checkpoint, if we continue a previous calculation
-		CutoffIterator cutoff = FrgCommon::cutoff().begin();
+		//读取是否为新运算或已经存在检查点,如果我们要继续之前的计算的话,读取检查点记录
+		CutoffIterator cutoff = FrgCommon::cutoff().begin();//读入截断值
 		if (_computationStatus.statusIdentifier == ComputationStatus::Identifier::Running)
 		{
 			_frgCore->_flowingFunctional->readCheckpoint(_fileset.checkpointFile);

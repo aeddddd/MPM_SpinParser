@@ -16,28 +16,28 @@
 class SpinParser;
 
 /**
- * @brief Virtual implementation of a pf-FRG numerics core. 
- * @details The FrgCore represents the central numerics unit for pf-FRG calculations. 
- * It defines the interface between the differential equation solver, measurement protocols, and the concrete implementation of flow equations. 
- * The FrgCore also defines the interface for reading and writing checkpoints. 
+ * @brief pf-FRG 数值核心的虚拟实现. 
+ * @details FrgCore 代表 pf-FRG 计算的中央数值单元. 
+ * 它定义了微分方程求解器、测量协议和流动方程的具体实现之间的接口. 
+ * FrgCore还定义了读写检查点的接口. 
  *
- * Every specific set of flow equations in its different symmetry-constrained form is derived from this class. 
- * Custom flow equations are implemented by subclassing the FrgCore and providing implementations of the virtual member functions. 
+ * 每个特定的不同对称约束形式的流动方程组均源自此类. 
+ * 自定义流方程是通过子类化 FrgCore 并提供虚拟成员函数的实现来实现的. 
  * 
- * New instances of FrgCore are created by the FrgCoreFactory::newFrgCore() routine.
+ * FrgCore 的新实例由 FrgCoreFactory::new FrgCore() 例程创建.
  */
 class FrgCore
 {
 	friend class SpinParser;
 public:
 	/**
-	 * @brief Invoke all associated measurement protocols. 
+	 * @brief 调用所有关联的测量协议。 
 	 */
 	void takeMeasurements() const
 	{
 		if (SpinParser::spinParser()->getComputationStatus().statusIdentifier == ComputationStatus::Identifier::Postprocessing)
 		{
-			//perform deferred measurements
+			//执行延迟测量
 			for (auto m : _measurements)
 			{
 				if (_flowingFunctional->cutoff <= m->maxCutoff() && _flowingFunctional->cutoff >= m->minCutoff())
@@ -48,7 +48,7 @@ public:
 		}
 		else
 		{
-			//perform non-deferred measurements
+			//执行非延迟测量
 			for (auto m : _measurements)
 			{
 				if (_flowingFunctional->cutoff <= m->maxCutoff() && _flowingFunctional->cutoff >= m->minCutoff())
@@ -57,7 +57,7 @@ public:
 				}
 			}
 
-			//write vertex output, if deferred measurements are specified
+			//如果指定了延迟测量，则写入顶点输出
 			bool postprocessingRequired = false;
 			if (SpinParser::spinParser()->getCommandLineOptions()->deferMeasurements()) postprocessingRequired = true;
 			for (auto m : _measurements) if (m->isDeferred()) postprocessingRequired = true;
@@ -68,27 +68,27 @@ public:
 	}
 
 	/**
-	 * @brief Virtual implementation of a single RG step in the solution of the flow equations. 
-	 * @details The concrete implementation of the method is expected to calculate the flow equation for the current configuration in FrgCore::flowingFunctional and populate FrgCore::flow with the results. 
-	 * It is not expected to make any further modifications. 
+	 * @brief 流动方程求解中单个 RG 步骤的虚拟实现. 
+	 * @details 该方法的具体实现预计将计算 FrgCore::flowing Function 中当前配置的流量方程，并将结果填充到 FrgCore::flow 中. 
+	 * 预计不会进行任何进一步的修改. 
 	 * 
 	 * @see FrgCore::finalizeStep()
 	 */
 	virtual void computeStep() = 0;
 
 	/**
-	 * @brief Virtual implementation of the finalization of a single RG step in the solution of the flow equations. 
-	 * @details The concrete implementation of the method is expected to update the values of FrgCore::flowingFunctional, 
-	 * based on the values of the flow FrgCore::flow and the designated new value of the frequency cutoff. 
+	 * @brief 虚拟实现流动方程求解中单个 RG 步骤的最终确定. 
+	 * @details 该方法的具体实现预计会更新FrgCore::flowingFunctional的值, 
+	 * 基于流动FrgCore::flow 的值和指定的新频率截止值. 
 	 * 
-	 * @param newCutoff New value of the cutoff. 
+	 * @param newCutoff 新的截止值. 
 	 */
 	virtual void finalizeStep(float newCutoff) = 0;
 
 	/**
-	 * @brief Retrieve the flowing functional.
+	 * @brief 检索流动泛函.
 	 *
-	 * @return EffectiveAction* Flowing functional.
+	 * @return EffectiveAction* 流动泛函.
 	 */
 	EffectiveAction *flowingFunctional() const
 	{
@@ -96,9 +96,9 @@ public:
 	}
 
 	/**
-	 * @brief Retrieve the vertex flow.
+	 * @brief 检索顶点流.
 	 *
-	 * @return EffectiveAction* Vertex flow.
+	 * @return EffectiveAction* 顶点流.
 	 */
 	EffectiveAction *flow() const
 	{
@@ -106,9 +106,9 @@ public:
 	}
 
 	/**
-	 * @brief Retrieve the list of measurements.
+	 * @brief 检索测量列表.
 	 *
-	 * @return std::vector<Measurement *> List of measurements.
+	 * @return std::vector<Measurement *> 测量列表.
 	 */
 	std::vector<Measurement *> measurements() const
 	{
@@ -117,15 +117,15 @@ public:
 
 protected:
 	/**
-	 * @brief Construct a new FrgCore, which takes ownership of the specified measurements.
+	 * @brief 构造一个新的FrgCore，它拥有指定测量的所有权.
 	 * @see Measurement
 	 *
-	 * @param measurements List of measurement protocols to invoke during the solution of the flow equations.
+	 * @param measurements 求解流动方程期间调用的测量协议列表.
 	 */
 	FrgCore(const std::vector<Measurement *> &measurements) : _flowingFunctional(nullptr), _flow(nullptr), _measurements(measurements) {};
 
 	/**
-	 * @brief Destroy the FrgCore object and delete any associated measurement protocols.
+	 * @brief 销毁FrgCore对象并删除任何关联的测量协议.
 	 */
 	virtual ~FrgCore()
 	{
@@ -136,7 +136,7 @@ protected:
 		}
 	}
 
-	EffectiveAction *_flowingFunctional; ///< Representation of the current state of the effective action. 
-	EffectiveAction *_flow; ///< Representation of the RG flow associated with the current state of the effective action. 
-	std::vector<Measurement *> _measurements; ///< List of measurement protocols to invoke throughout the solution of the flow equations. 
+	EffectiveAction *_flowingFunctional; ///< 表示有效动作的当前状态. 
+	EffectiveAction *_flow; ///< 与有效操作的当前状态相关的 RG 流的表示. 
+	std::vector<Measurement *> _measurements; ///< 在整个流量方程求解过程中调用的测量协议列表. 
 };

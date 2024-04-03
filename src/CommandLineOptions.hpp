@@ -10,82 +10,82 @@
 #include <string>
 
 /**
- * @brief Parser object, which can be fed with argc/argv information and which then holds the parsed values in its member variables. 
+ * @brief 解析器对象，可以提供 argc/argv 信息，然后将解析的值保存在其成员变量中. 
  */
 class CommandLineOptions
 {
 public:
 	/**
-	 * @brief Construct a new CommandLineOptions object and parse argc/argv information. 
+	 * @brief 构造新的 CommandLineOptions 对象并分析 argc/argv 信息. 
 	 * 
-	 * @param argc Argument count as passed to the program call. 
-	 * @param argv Argument vector as passed to the program call. 
+	 * @param argc 传递给程序调用的参数计数. 
+	 * @param argv 传递给程序调用的参数向量. 
 	 */
 	CommandLineOptions(int argc, char **argv);
 
 	/**
-	 * @brief Retrieve the '--help' flag setting. 
+	 * @brief 检索“--help”标志设置. 
 	 * 
-	 * @return bool Return true, if the '--help' flag is set. Otherwise, return false.
+	 * @return bool 如果设置了“--help”标志，则返回 true。否则，返回 false.
 	 */
 	bool help() const;
 
 	/**
-	 * @brief Retrieve the '--verbose' flag setting. 
+	 * @brief 检索“--verbose”标志设置. 
 	 * 
-	 * @return bool Return true, if the '--verbose' flag is set. Otherwise, return false.
+	 * @return bool 如果设置了“--verbose”标志，则返回 true。否则返回 false.
 	 */
 	bool verbose() const;
 
 	/**
-	 * @brief Retrieve the value of the '--checkpointTime' flag. 
+	 * @brief 检索“--checkpoint Time”标志的值. 
 	 * 
-	 * @return int Value of the '--checkpointTime' flag. 
+	 * @return int “--checkpoint Time”标志的值. 
 	 */
 	int checkpointTime() const;
 
 	/**
-	 * @brief Retrieve the '--forceRestart' flag setting. 
+	 * @brief 检索“--force Restart”标志设置. 
 	 * 
-	 * @return bool Return true, if the '--forceRestart' flag is set. Otherwise, return false.
+	 * @return bool 如果设置了“--force Restart”标志，则返回 true。否则返回 false.
 	 */
 	bool forceRestart() const;
 
 	/**
-	 * @brief Retrieve the '--defer' flag setting. 
+	 * @brief 检索“--defer”标志设置. 
 	 * 
-	 * @return bool Return true, if the '--defer' flag is set. Otherwise, return false.
+	 * @return bool 如果设置了“--defer”标志，则返回 true。否则返回 false.
 	 */
 	bool deferMeasurements() const;
 
 	/**
-	 * @brief Retrieve the '--debugLattice' flag setting. 
+	 * @brief 检索“--debug Lattice”标志设置. 
 	 * 
-	 * @return bool Return true, if the '--debugLattice' flag is set. Otherwise, return false.
+	 * @return bool 如果设置了“--debug Lattice”标志，则返回 true。否则返回 false.
 	 */
 	bool debugLattice() const;
 
 	/**
-	 * @brief Retrieve the value of the '--taskFile' flag.
+	 * @brief 检索“--task File”标志的值.
 	 * 
-	 * @return std::string Value of the '--taskFile' flag.
+	 * @return std::string “--task File”标志的值.
 	 */
 	std::string taskFile() const;
 
 	/**
-	 * @brief Retrieve the value of the '--resourcePath' flag.
+	 * @brief 检索“--resource Path”标志的值.
 	 * 
-	 * @return std::string Value of the '--resourcePath' flag.
+	 * @return std::string “--resource Path”标志的值.
 	 */
 	std::string resourcePath() const;
 
 protected:
-	bool _help; ///< Help flag '--help' is set.
-	bool _verbose; ///< Verbose flag '--verbose' is set.
-	int _checkpointTime; ///< Value of the '--checkpointTime' argument. 
-	bool _forceRestart; ///< Force flag '--forceRestart' is set. 
-	bool _deferMeasurements; ///< Defer flag '--defer' is set. 
-	bool _debugLattice; ///< Lattice debug flag '--debugLattice' is set. 
-	std::string _taskFile; ///< Value of the '--taskFile' argument. 
-	std::string _resourcePath; ///< Value of the '--resourcePath' argument. 
+	bool _help; ///< 设置帮助标志“--help”.
+	bool _verbose; ///< 设置了详细标志“--verbose”.
+	int _checkpointTime; ///< “--checkpoint Time”参数的值. 
+	bool _forceRestart; ///< 强制标志“--force Restart”已设置. 
+	bool _deferMeasurements; ///< 延迟标志“--defer”已设置. 
+	bool _debugLattice; ///< 设置了晶格调试标志“--debug Lattice”. 
+	std::string _taskFile; ///< “--task File”参数的值. 
+	std::string _resourcePath; ///< “--resource Path”参数的值. 
 };

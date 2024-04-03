@@ -12,22 +12,22 @@
 
 #pragma region CutoffIterator
 /**
- * @brief Iterator over discrete cutoff values. 
+ * @brief 离散截止值的迭代器. 
  */
 struct CutoffIterator
 {
 public:
 	/**
-	 * @brief Construct a new CutoffIterator object pointing to specific value. 
+	 * @brief 构造一个指向特定值的新 Cutoff Iterator 对象. 
 	 * 
-	 * @param p Pointer to initial value. 
+	 * @param p 指向初始值的指针. 
 	 */
 	CutoffIterator(float* p) : _pointer(p) {};
 
 	/**
-	 * @brief Iterator dereference. 
+	 * @brief 迭代器解引用. 
 	 * 
-	 * @return float Cutoff value. 
+	 * @return float 截止值. 
 	 */
 	float operator*() const
 	{
@@ -35,10 +35,10 @@ public:
 	}
 
 	/**
-	 * @brief Iterator comparison
+	 * @brief 迭代器比较
 	 * 
-	 * @param rhs Right hand side operand. 
-	 * @return bool Returns true of iterators are equal, returns false otherwise.  
+	 * @param rhs 右侧操作数. 
+	 * @return bool 迭代器相等则返回 true，否则返回 false.  
 	 */
 	bool operator==(const CutoffIterator& rhs) const
 	{
@@ -46,10 +46,10 @@ public:
 	}
 	
 	/**
-	 * @brief Negative iterator comparison
+	 * @brief 负迭代器比较
 	 * 
-	 * @param rhs Right hand side operand. 
-	 * @return bool Returns true of iterators are unequal, returns false otherwise.   
+	 * @param rhs 右侧操作数. 
+	 * @return bool 迭代器不相等返回 true，否则返回 false.   
 	 */
 	bool operator!=(const CutoffIterator& rhs) const
 	{
@@ -57,9 +57,9 @@ public:
 	}
 	
 	/**
-	 * @brief Prefix increment. 
+	 * @brief 前缀增量. 
 	 * 
-	 * @return CutoffIterator& Reference to self. 
+	 * @return 截止迭代器和对自身的引用. 
 	 */
 	CutoffIterator& operator++()
 	{
@@ -68,25 +68,25 @@ public:
 	}
 
 private:
-	float *_pointer; ///< Pointer which the iterator currently points to. 
+	float *_pointer; ///< 迭代器当前指向的指针. 
 };
 #pragma endregion
 
 /**
- * @brief Representation of frequency axis cutoff discretization. 
+ * @brief 频率轴截止离散化的表示. 
  */
 struct CutoffDiscretization
 {
 public:
 	/**
-	 * @brief Construct a new CutoffDiscretization object from a list of cutoff values. 
+	 * @brief 从截止值列表构造一个新的截止离散化对象. 
 	 * 
-	 * @param values List of cutoff values to use for discretization. 
+	 * @param values 用于离散化的截止值列表. 
 	 */
 	CutoffDiscretization(const std::vector<float> &values)
 	{
-		//Ensure that discretization contains sufficiently many cutoff values
-		if (values.size() < 2) throw Exception(Exception::Type::ArgumentError, "CutoffDiscretization must contain at least two frequency values");
+		//确保离散化包含足够多的截止值
+		if (values.size() < 2) throw Exception(Exception::Type::ArgumentError, "截止离散化必须包含至少两个频率值");
 
 		_size = int(values.size());
 		_data = new float[values.size()];
@@ -94,7 +94,7 @@ public:
 	}
 
 	/**
-	 * @brief Destroy the CutoffDiscretization object
+	 * @brief 销毁截止离散化对象
  	*/
 	~CutoffDiscretization()
 	{
@@ -102,9 +102,9 @@ public:
 	}
 
 	/**
-	 * @brief Retrieve iterator to first discretization value. 
+	 * @brief 检索迭代器到第一个离散化值. 
 	 * 
-	 * @return CutoffIterator Iterator to first discretization value. 
+	 * @return CutoffIterator 第一个离散值的迭代器. 
 	 */
 	CutoffIterator begin() const
 	{
@@ -112,9 +112,9 @@ public:
 	}
 
 	/**
-	 * @brief Retrieve iterator to last discretization value. 
+	 * @brief 检索迭代器到最后一个离散化值. 
 	 * 
-	 * @return CutoffIterator Iterator to last discretization value. 
+	 * @return CutoffIterator 迭代到最后一个离散值. 
 	 */
 	CutoffIterator last() const
 	{
@@ -122,9 +122,9 @@ public:
 	}
 
 	/**
-	 * @brief Retrieve iterator to last+1 discretization value. 
+	 * @brief 检索迭代器到最后+1离散化值. 
 	 * 
-	 * @return CutoffIterator Iterator to last+1 discretization value. 
+	 * @return CutoffIterator 迭代到最后+1离散化值. 
 	 */
 	CutoffIterator end() const
 	{
@@ -132,10 +132,10 @@ public:
 	}
 
 	/**
-	 * @brief Retrieve iterator pointing to a specific cutoff value. 
+	 * @brief 检索指向特定截止值的迭代器. 
 	 * 
-	 * @param cutoff Cutoff search value. 
-	 * @return CutoffIterator Iterator pointing to specified cutoff value it it exists; otherwise points to last+1. 
+	 * @param cutoff 截止搜索值. 
+	 * @return CutoffIterator 指向指定截止值（如果存在）的迭代器；否则指向last+1. 
 	 */
 	CutoffIterator find(const float cutoff) const
 	{
@@ -147,6 +147,6 @@ public:
 	}
 
 private:
-	int _size; ///< Number of cutoff values in the discretization. 
-	float *_data; ///< Internal storage for discretization values. 
+	int _size; ///< 离散化中的截止值数量. 
+	float *_data; ///< 离散值的内部存储. 
 };
