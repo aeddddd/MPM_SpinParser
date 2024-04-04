@@ -24,7 +24,7 @@ TRIMeasurementCorrelation::TRIMeasurementCorrelation(const std::string &outfile,
 	int latticeSizeBasis = int(FrgCommon::lattice()._basis.size());
 	_memoryStepLattice = latticeSizeBasis * latticeSizeExtended;
 
-	//prepare correlation buffer
+	//准备相关缓冲区
 	_correlationsDD = new float[latticeSizeBasis * latticeSizeExtended];
 	_correlationsXX = new float[latticeSizeBasis * latticeSizeExtended];
 	_correlationsXY = new float[latticeSizeBasis * latticeSizeExtended];
@@ -36,7 +36,7 @@ TRIMeasurementCorrelation::TRIMeasurementCorrelation(const std::string &outfile,
 	_correlationsZY = new float[latticeSizeBasis * latticeSizeExtended];
 	_correlationsZZ = new float[latticeSizeBasis * latticeSizeExtended];
 
-	//set up loadManager
+	//设置负载管理器
 	//stack0
 	HMP::StackIdentifier dataStack0 = SpinParser::spinParser()->getLoadManager()->addMasterStackExplicit<float>(
 		&_currentCutoff,

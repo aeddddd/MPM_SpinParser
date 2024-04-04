@@ -12,49 +12,49 @@
 #include "lib/Exception.hpp"
 
 /**
- * @brief Virtual implementation of a flowing effective action. 
- * @details Concrete implementations should implement datastructures as desired -- e.g. two-point vertex and four-point vertex information. 
- * This object provides the virtual interface accessed by FrgCore implementations and the SpinParser. 
+ * @brief 虚拟实施流畅有效的行动. 
+ * @details 具体实现应该根据需要实现数据结构——例如两点顶点和四点顶点信息. 
+ * 该对象提供由 FrgCore 实现和 Spin Parser 访问的虚拟接口. 
  */
 struct EffectiveAction
 {
 public:
 	/**
-	 * @brief Construct a new EffectiveAction object.
+	 * @brief 构造一个新的Effective Action对象.
 	 */
 	EffectiveAction() : cutoff(0.0f) {};
 
 	/**
-	 * @brief Virtual destructor.
+	 * @brief 虚拟析构函数.
 	 */
 	virtual ~EffectiveAction() {};
 
 	/**
-	 * @brief Write all internal data to a checkpoint at the specified file path and return the identifier of the checkpoint written. The checkpoint identifier is a non-negative integer that enumerates all the checkpoint datasets in the output file, starting at zero.
+	 * @brief 将所有内部数据写入指定文件路径的检查点，并返回写入的检查点的标识符。检查点标识符是一个非负整数，枚举输出文件中的所有检查点数据集，从零开始.
 	 * 
-	 * @param dataFilePath Checkpoint file path. 
-	 * @param append If set to false, overwrite existing checkpoint. Otherwise, append checkpoint if no previous checkpoint at the same cutoff value exists. If a checkpoint at the same cutoff value already exists, do nothing.
+	 * @param dataFilePath 检查点文件路径. 
+	 * @param append 如果设置为 false，则覆盖现有检查点。否则，如果不存在具有相同截止值的先前检查点，则附加检查点。如果具有相同截止值的检查点已存在，则不执行任何操作.
 	 *
-	 * @return int Identifier of the checkpoint written. If the writing process has been skipped, return -1. 
+	 * @return int 写入的检查点的标识符。如果写入过程被跳过，则返回-1. 
 	 */
 	virtual int writeCheckpoint(const std::string &dataFilePath, const bool append = false) const = 0;
 
 	/**
-	 * @brief Read internal data from a checkpoint with the specified checkpoint identifier at the specified file path. 
-	 * If the checkpoint identifier is set to -1, read the most recent checkpoint.
+	 * @brief 从指定文件路径处具有指定检查点标识符的检查点读取内部数据. 
+	 * 如果检查点标识符设置为-1，则读取最近的检查点.
 	 * 
-	 * @param datafilePath Checkpoint file path. 
-	 * @param checkpointId Identifier of the checkpoint to read. 
-	 * @return bool Return true if a checkpoint was read successfully; otherwise return false. 
+	 * @param datafilePath 检查点文件路径. 
+	 * @param checkpointId 要读取的检查点的标识符. 
+	 * @return bool 如果检查点读取成功则返回 true；否则返回 false. 
 	 */
 	virtual bool readCheckpoint(const std::string &datafilePath, const int checkpointId = -1) = 0;
 
 	/**
-	 * @brief Indicate whether the vertex has diverged to NaN. 
+	 * @brief 指示顶点是否已经发散到 NaN. 
 	 *
-	 * @return bool Return true if the vertex has diverged, otherwise return false. 
+	 * @return bool 如果顶点已发散，则返回 true，否则返回 false. 
 	 */
 	virtual bool isDiverged() const = 0;
 
-	float cutoff; ///< Value of the RG cutoff. 
+	float cutoff; ///< RG 截止值. 
 };

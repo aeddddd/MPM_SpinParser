@@ -135,7 +135,7 @@ void SpinParser::runCore()
 			cutoff = FrgCommon::cutoff().find(_frgCore->_flowingFunctional->cutoff);
 		}
 
-		//run calculation
+		//‘À––º∆À„
 		if (_computationStatus.statusIdentifier == ComputationStatus::Identifier::New) _computationStatus.startTime = Timestamp::time();
 		_computationStatus.checkpointTime = Timestamp::time();
 		while (cutoff != FrgCommon::cutoff().last())
