@@ -15,21 +15,21 @@
 namespace Log
 {
 	/**
-	 * @brief Specify log level for output filtering. Any Log level includes also output from lower output levels.
+	 * @brief 指定输出过滤的日志级别。任何日志级别还包括较低输出级别的输出.
 	 */
 	enum struct LogLevel
 	{
-		None = 0, ///< No output. 
-		Error = 1, ///< Print error messages. 
-		Warning = 2, ///< Print warnings. 
-		Info = 3, ///< Print information. 
-		Debug = 4 ///< Print debug output. 
+		None = 0, ///< 无输出. 
+		Error = 1, ///< 打印错误消息. 
+		Warning = 2, ///< 打印警告. 
+		Info = 3, ///< 打印信息. 
+		Debug = 4 ///< 打印调试输出. 
 	};
 
 	class Logstream;
 
 	/**
-	 * @brief Logstream manipulator type with internal structure. 
+	 * @brief 具有内部结构的日志流操纵器类型. 
 	 */
 	typedef std::function<Logstream & (Logstream &)> StructManipulator;
 
@@ -39,10 +39,10 @@ namespace Log
 	typedef Logstream &(*Manipulator)(Logstream &);
 
 	/**
-	 * @brief Log stream object for simple output filtering.
-	 * @details The Logstream object provides output filtering accordign to a selected log level.
-	 * The filtered output is written to stdout.
-	 * Any output generated is printed with a timestamp, measring the time since creation of the Logstream object.
+	 * @brief 用于简单输出过滤的日志流对象.
+	 * @details Logstream 对象根据选定的日志级别提供输出过滤.
+	 * 过滤后的输出写入 stdout.
+	 * 生成的任何输出都带有时间戳，测量自创建 Logstream 对象以来的时间.
 	 */
 	class Logstream
 	{
@@ -51,7 +51,7 @@ namespace Log
 		friend StructManipulator setLogLevel(const Log::LogLevel logLevel);
 	public:
 		/**
-		 * @brief Construct a new Logstream object with log filtering to Log::LogLevel::Info.
+		 * @brief 构造一个新的 Logstream 对象，日志过滤为 Log::Log Level::Info.
 		 */
 		Logstream(std::ostream &logTarget) : _logTarget(logTarget), _constructionTime(boost::posix_time::microsec_clock::local_time())
 		{
@@ -61,12 +61,12 @@ namespace Log
 		};
 
 		/**
-		 * @brief Output operator for messages of arbitrary type. Will accept any log object that implements the output operator for stdout.
+		 * @brief 任意类型消息的输出运算符。将接受任何实现 stdout 的输出运算符的日志对象.
 		 *
-		 * @tparam Type of the log message.
-		 * @param ls Target Logstream object.
-		 * @param rhs Log message to be written.
-		 * @return Logstream& Reference to Logstream operand.
+		 * @tparam 日志消息的类型.
+		 * @param ls 目标 Logstream 对象.
+		 * @param rhs 要写入的日志消息.
+		 * @return Logstream& 参考 Logstream 操作数.
 		 */
 		template <class T> friend Logstream &operator<<(Logstream &ls, const T &rhs)
 		{
@@ -90,10 +90,10 @@ namespace Log
 		}
 
 		/**
-		 * @brief Output operator for LogLevel objects to set filter level.
+		 * @brief 用于设置过滤级别的 Log Level 对象的输出运算符.
 		 *
-		 * @param rhs New LogLevel value.
-		 * @return Logstream& Reference to self.
+		 * @param rhs 新的日志级别值.
+		 * @return Logstream& 参考自身.
 		 */
 		Logstream &operator<<(const Log::LogLevel &rhs)
 		{
@@ -102,10 +102,10 @@ namespace Log
 		}
 
 		/**
-		 * @brief Apply plain output manipulator to log stream.
+		 * @brief 将普通输出操纵器应用于日志流.
 		 *
-		 * @param rhs Logstream manipulator.
-		 * @return Logstream& Reference to self.
+		 * @param rhs 日志流操纵器.
+		 * @return Logstream& 参考自身.
 		 */
 		Logstream &operator<<(const Manipulator &rhs)
 		{
@@ -113,10 +113,10 @@ namespace Log
 		}
 
 		/**
-		 * @brief Apply structured output manipulator to log stream.
+		 * @brief 将结构化输出操纵器应用于日志流.
 		 *
-		 * @param rhs Logstream manipulator.
-		 * @return Logstream& Reference to self.
+		 * @param rhs 日志流操纵器.
+		 * @return Logstream& 参考自身.
 		 */
 		Logstream &operator<<(const StructManipulator &rhs)
 		{
@@ -124,20 +124,20 @@ namespace Log
 		}
 
 	private:
-		std::ostream &_logTarget; ///< Output stream. 
-		boost::posix_time::ptime _constructionTime; ///< Creation time of the Logstream object. 
+		std::ostream &_logTarget; ///< 输出流. 
+		boost::posix_time::ptime _constructionTime; ///< Logstream对象的创建时间. 
 
-		bool _carriageReturn; ///< If set to true, the next log message is printed with timestamp. 
-		Log::LogLevel _displayLogLevel; ///< Selected output filtering. @see Log::LogLevel
-		Log::LogLevel _streamLogLevel; ///< Current log level for new log messages. 
+		bool _carriageReturn; ///< 如果设置为 true，则打印下一条日志消息并带有时间戳. 
+		Log::LogLevel _displayLogLevel; ///< 选定的输出过滤. @see Log::LogLevel
+		Log::LogLevel _streamLogLevel; ///< 新日志消息的当前日志级别. 
 	};
 
 	#pragma region Manipulators
 	/**
-	 * @brief Output modifier to print new line.
+	 * @brief 输出修饰符打印新行.
 	 *
-	 * @param ls Target Logstream object.
-	 * @return Logstream& Reference to self.
+	 * @param ls 目标 Logstream 对象.
+	 * @return Logstream& 参考自身.
 	 */
 	inline Logstream &endl(Logstream &ls)
 	{
@@ -150,10 +150,10 @@ namespace Log
 	}
 
 	/**
-	 * @brief Generate output modifier to set the display log level filter.
+	 * @brief 生成输出修饰符以设置显示日志级别过滤器.
 	 *
-	 * @param logLevel Filter level.
-	 * @return StructManipulator Logstream manipulator.
+	 * @param logLevel 过滤等级.
+	 * @return StructManipulator 日志流操纵器.
 	 */
 	inline StructManipulator setDisplayLogLevel(const Log::LogLevel logLevel)
 	{
@@ -166,10 +166,10 @@ namespace Log
 	}
 
 	/**
-	 * @brief Generate output modifier to change the log level.
+	 * @brief 生成输出修饰符以更改日志级别.
 	 *
-	 * @param logLevel New log level.
-	 * @return StructManipulator Logstream manipulator.
+	 * @param logLevel 新的日志级别.
+	 * @return StructManipulator 日志流操纵器.
 	 */
 	inline StructManipulator setLogLevel(const Log::LogLevel logLevel)
 	{
@@ -182,5 +182,5 @@ namespace Log
 	}
 	#pragma endregion
 
-	extern Logstream log; ///< Global Logstream instance. 
+	extern Logstream log; ///< 全局 Logstream 实例. 
 }

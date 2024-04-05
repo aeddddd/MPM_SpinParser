@@ -10,53 +10,53 @@
 #include "FrgCore.hpp"
 
 /**
- * @brief FrgCore implementation for time reversal invariant models.
+ * @brief 时间反转不变模型的 FrgCore 实现.
  */
 class TRIFrgCore : public FrgCore
 {
 public:
 	/**
-	 * @brief Construct a new TRIFrgCore, initialize with the specified spin model and add measurements. 
+	 * @brief 构造一个新的 TRIFrgCore，使用指定的自旋模型进行初始化并添加测量. 
 	 * 
-	 * @param spinModel Spin model to initialize the effective action with. 
-	 * @param measurements Measurements to add. 
-	 * @param options String-form list of core options as provided in the task file. 
+	 * @param spinModel 自旋模型初始化有效动作. 
+	 * @param measurements 要添加的测量值. 
+	 * @param options 任务文件中提供的核心选项的字符串形式列表. 
 	 */
 	TRIFrgCore(const SpinModel &spinModel, const std::vector<Measurement *> &measurements, const std::map<std::string, std::string> &options);
 	
 	/**
-	 * @brief Destroy the TRIFrgCore object. 
+	 * @brief 销毁 TRIFrgCore 对象. 
 	 */
 	~TRIFrgCore();
 
 	/**
-	 * @brief Compute flow equations. 
+	 * @brief 计算流动方程. 
 	 */
 	void computeStep() override;
 
 	/**
-	 * @brief Finalize calculation of flow equations. 
+	 * @brief 完成这次流动方程的计算. 
 	 * 
-	 * @param newCutoff New cutoff to which to extrapolate flow. 
+	 * @param newCutoff 推断流动的新截止点. 
 	 */
 	void finalizeStep(const float newCutoff) override;
 
-	float normalization; ///< Energy normalization factor. 
+	float normalization; ///< 能量归一化因子. 
 
 private:
-	int dataStacks[6]; ///< References to the LoadManager::DataStack. 
+	int dataStacks[6]; ///<对 LoadManager::DataStack 的引用. 
 
 	/**
-	 * @brief Calculate the single-particle vertex flow for a specific linear iterator, which is expanded via TRIVertexSingleParticle::expandIterator().
+	 * @brief 计算特定线性迭代器的单粒子顶点流，该迭代器通过 TRIVertexSingleParticle::expand Iterator() 进行扩展.
 	 * 
-	 * @param iterator Linear iterator. 
+	 * @param iterator 线性迭代器. 
 	 */
 	void _calculateVertexSingleParticle(const int iterator);
 
 	/**
-	 * @brief Calculate the two-particle vertex flow for a specific linear iterator, which is expanded via TRIVertexTwoParticle::expandIterator().
+	 * @brief 计算特定线性迭代器的双粒子顶点流，该迭代器通过 TRIVertexTwoParticle::expand Iterator() 展开.
 	 * 
-	 * @param iterator Linear iterator. 
+	 * @param iterator 线性迭代器. 
 	 */
 	void _calculateVertexTwoParticle(const int iterator);
 };

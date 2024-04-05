@@ -75,13 +75,13 @@ TRIFrgCore::~TRIFrgCore()
 
 void TRIFrgCore::computeStep()
 {
-	//update cutoff and broadcast
+	//更新截止和广播
 	SpinParser::spinParser()->getLoadManager()->calculate(dataStacks[3]);
 	SpinParser::spinParser()->getLoadManager()->broadcast(dataStacks[3]);
-	//calculate 1-particle vertices and broadcast (required for Katanin calculation)
+	//计算 1 粒子顶点并广播（Katanin 计算所需）
 	SpinParser::spinParser()->getLoadManager()->calculate(dataStacks[4]);
 	SpinParser::spinParser()->getLoadManager()->broadcast(dataStacks[4]);
-	//calculate 2-particle vertices and managed measurements
+	//计算 2 粒子顶点和管理测量
 	std::vector<int> managedMeasurementStacks;
 	for (auto m = _measurements.begin(); m != _measurements.end(); ++m)
 	{
@@ -97,25 +97,25 @@ void TRIFrgCore::computeStep()
 
 void TRIFrgCore::finalizeStep(float newCutoff)
 {
-	//determine cutoff set
+	//确定截止集
 	float cutoffStep = newCutoff - _flowingFunctional->cutoff;
 
-	//set new cutoff value
+	//设置新的截止值
 	_flowingFunctional->cutoff = newCutoff;
 
-	//add _flow to single particle vertex
+	//将 _flow 添加到单粒子顶点
 	#ifndef DISABLE_OMP
 	#pragma omp parallel for schedule(static)
 	#endif
 	for (int i = 0; i < static_cast<TRIEffectiveAction *>(_flowingFunctional)->vertexSingleParticle->size; ++i) static_cast<TRIEffectiveAction *>(_flowingFunctional)->vertexSingleParticle->_data[i] += cutoffStep * static_cast<TRIEffectiveAction *>(_flow)->vertexSingleParticle->_data[i];
 
-	//add _flow to two particle vertex
+	//将 _flow 添加到双粒子顶点
 	#ifndef DISABLE_OMP
 	#pragma omp parallel for schedule(static)
 	#endif
 	for (int i = 0; i < static_cast<TRIEffectiveAction *>(_flowingFunctional)->vertexTwoParticle->size; ++i) static_cast<TRIEffectiveAction *>(_flowingFunctional)->vertexTwoParticle->_data[i] += cutoffStep * static_cast<TRIEffectiveAction *>(_flow)->vertexTwoParticle->_data[i];
 
-	//broadcast updated effective action
+	//广播更新有效行动
 	SpinParser::spinParser()->getLoadManager()->broadcast({ dataStacks[0], dataStacks[1], dataStacks[2] });
 }
 
@@ -177,7 +177,7 @@ void TRIFrgCore::_calculateVertexTwoParticle(const int iterator)
 	float w2p = 0.5f * (s - t - u);
 	float w2 = 0.5f * (s + t - u);
 
-	//integrand of the ferquency integral
+	//频率积分的被积函数
 	auto integralKernelS = [&](const float wp, ValueSuperbundle<float, 16> &returnBuffer) -> void
 	{
 		//pp-ladder A and B (positive sign)
@@ -2939,7 +2939,7 @@ void TRIFrgCore::_calculateVertexTwoParticle(const int iterator)
 		v4CurrentValue.multAdd(p(cutoff, cutoff - u), buffer1);
 	}
 
-	//Katanin contribution
+	//Katanin 贡献
 	std::function<void(float, ValueSuperbundle<float, 16> &)> integralKernelSKatanin = [&](float wp, ValueSuperbundle<float, 16> &returnBuffer)->void { integralKernelS(wp, returnBuffer); returnBuffer *= pKataninContribution(wp, s + wp); };
 	std::function<void(float, ValueSuperbundle<float, 16> &)> integralKernelTKatanin = [&](float wp, ValueSuperbundle<float, 16> &returnBuffer)->void { integralKernelT(wp, returnBuffer); returnBuffer *= pKataninContribution(wp, t + wp); };
 	std::function<void(float, ValueSuperbundle<float, 16> &)> integralKernelUKatanin = [&](float wp, ValueSuperbundle<float, 16> &returnBuffer)->void { integralKernelU(wp, returnBuffer); returnBuffer *= pKataninContribution(wp, u + wp); };

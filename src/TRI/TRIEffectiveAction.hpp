@@ -14,13 +14,13 @@
 #include "TRIVertexTwoParticle.hpp"
 
 /**
- * @brief Implementation of a flowing effective action for time reversal invariant models.  
+ * @brief 时间反转不变模型的流动有效动作的实现.  
  */
 struct TRIEffectiveAction : public EffectiveAction
 {
 public:
 	/**
-	 * @brief Construct a new TRIEffectiveAction object. 
+	 * @brief 构造一个新的 TRIEffective Action 对象. 
 	 */
 	TRIEffectiveAction()
 	{
@@ -29,11 +29,11 @@ public:
 	}
 
 	/**
-	 * @brief Construct a new effective action and initialize values at given cutoff for a given spin model. 
+	 * @brief 为给定的自旋模型构造一个新的有效动作并在给定的截止值处初始化值. 
 	 * 
-	 * @param cutoff Cutoff value to initialize. 
-	 * @param spinModel Spin model to initialize. 
-	 * @param core Reference to the FRGCore which creates the object. 
+	 * @param cutoff 初始化的截止值. 
+	 * @param spinModel 自旋模型初始化. 
+	 * @param core 引用创建对象的 FRGCore. 
 	 */
 	TRIEffectiveAction(const float cutoff, const SpinModel &spinModel, const TRIFrgCore *core)
 	{

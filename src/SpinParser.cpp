@@ -125,9 +125,9 @@ HMP::LoadManager *SpinParser::getLoadManager() const
 
 void SpinParser::runCore()
 {
+	//读取是否为新运算或已经存在检查点,如果我们要继续之前的计算的话,读取检查点记录
 	if (_computationStatus.statusIdentifier == ComputationStatus::Identifier::New || _computationStatus.statusIdentifier == ComputationStatus::Identifier::Running)
 	{
-		//读取是否为新运算或已经存在检查点,如果我们要继续之前的计算的话,读取检查点记录
 		CutoffIterator cutoff = FrgCommon::cutoff().begin();//读入截断值
 		if (_computationStatus.statusIdentifier == ComputationStatus::Identifier::Running)
 		{
@@ -136,30 +136,32 @@ void SpinParser::runCore()
 		}
 
 		//运行计算
+		//记录开始时间
 		if (_computationStatus.statusIdentifier == ComputationStatus::Identifier::New) _computationStatus.startTime = Timestamp::time();
 		_computationStatus.checkpointTime = Timestamp::time();
+		//开始对截断进行迭代计算
 		while (cutoff != FrgCommon::cutoff().last())
 		{
-			//compute flow and measurements
-			Log::log << Log::LogLevel::Debug << "Begin computation of flow." << Log::endl;
+			//计算流动和测量
+			Log::log << Log::LogLevel::Debug << "开始流动计算." << Log::endl;
 			_frgCore->computeStep();
-			Log::log << Log::LogLevel::Debug << "Begin computation of measurements." << Log::endl;
+			Log::log << Log::LogLevel::Debug << "开始计算测量值." << Log::endl;
 			_frgCore->takeMeasurements();
 
-			//check if flow has diverged
-			Log::log << Log::LogLevel::Debug << "Begin computation of vertex." << Log::endl;
+			//检查流量是否已分流
+			Log::log << Log::LogLevel::Debug << "开始计算顶点." << Log::endl;
 			if (_frgCore->_flow->isDiverged())
 			{
-				Log::log << Log::LogLevel::Info << "Vertex has diverged. Stopping calculation." << Log::endl;
+				Log::log << Log::LogLevel::Info << "顶点已发散.停止计算." << Log::endl;
 				break;
 			}
 
-			//perform integration step
+			//执行积分步骤
 			++cutoff;
 			_frgCore->finalizeStep(*cutoff);
 
-			//print progress and write checkpoint
-			Log::log << Log::LogLevel::Info << "Current cutoff is at " << std::fixed << std::setprecision(6) << _frgCore->_flowingFunctional->cutoff << Log::endl;
+			//打印进度并写入检查点
+			Log::log << Log::LogLevel::Info << "当前时间的截断(cutoff)是 " << std::fixed << std::setprecision(6) << _frgCore->_flowingFunctional->cutoff << Log::endl;
 			if (Timestamp::isOlder(_computationStatus.checkpointTime, _commandLineOptions->checkpointTime()))
 			{
 				_computationStatus.checkpointTime = Timestamp::time();
@@ -168,10 +170,10 @@ void SpinParser::runCore()
 			}
 		}
 
-		//perform final measurement
+		//执行最终测量
 		_frgCore->takeMeasurements();
 
-		//finalize calculation and write last checkpoint
+		//完成计算并写入最后一个检查点
 		bool postprocessingRequired = false;
 		if (_commandLineOptions->deferMeasurements()) postprocessingRequired = true;
 		for (auto m : _frgCore->_measurements) if (m->isDeferred()) postprocessingRequired = true;
@@ -213,7 +215,7 @@ void SpinParser::writeCheckpoint()
 {
 	if (_isMasterRank)
 	{
-		Log::log << Log::LogLevel::Info << "Writing checkpoint." << Log::endl;
+		Log::log << Log::LogLevel::Info << "写入检查点." << Log::endl;
 		_frgCore->_flowingFunctional->writeCheckpoint(_fileset.checkpointFile);
 		_taskFileParser->writeTaskFile(_computationStatus);
 	}

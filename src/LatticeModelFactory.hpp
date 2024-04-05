@@ -16,97 +16,97 @@
 namespace LatticeModelFactory
 {
 	/**
-	 * @brief Representation of a Lattice site. 
+	 * @brief 格子位点的表示. 
 	 */
 	struct LatticeSite
 	{
 	public:
 		/**
-		 * @brief Construct an uninitialized lattice site object. 
+		 * @brief 构造一个未初始化的点阵对象. 
 		 */
 		LatticeSite();
 
 		/**
-		 * @brief Construct a well-defined lattice site. 
+		 * @brief 构建明确的位点. 
 		 * 
-		 * @param a0 Coordinate in units of the first Bravais lattice vector. 
-		 * @param a1 Coordinate in units of the second Bravais lattice vector. 
-		 * @param a2 Coordinate in units of the third Bravais lattice vector. 
-		 * @param b Basis site index. 
+		 * @param a0 以第一布拉维晶格向量为单位的坐标. 
+		 * @param a1 以第二布拉维晶格向量为单位的坐标. 
+		 * @param a2 以第三布拉维晶格向量为单位的坐标. 
+		 * @param b 基础位点索引. 
 		 */
 		LatticeSite(const int a0, const int a1, const int a2, const int b);
 
 		/**
-		 * @brief Comparison operator. 
+		 * @brief 比较运算符. 
 		 * 
-		 * @param rhs Right hand side operand. 
-		 * @return bool Returns true if both objects desribe the same lattice site. Returns false otherwise. 
+		 * @param rhs 右侧操作数. 
+		 * @return bool 如果两个对象描述相同的晶格位点，则返回 true。否则返回 false. 
 		 */
 		bool operator==(const LatticeSite& rhs) const;
 
 		/**
-		 * @brief Negative comparison operator. 
+		 * @brief 负比较运算符. 
 		 * 
-		 * @param rhs Right hand side operand. 
-		 * @return bool Returns false if both objects desribe the same lattice site. Returns true otherwise. 
+		 * @param rhs 右侧操作数. 
+		 * @return bool 如果两个对象描述相同的晶格位点，则返回 false。否则返回 true. 
 		 */
 		bool operator!=(const LatticeSite& rhs) const;
 
-		int a0; ///< Coordinate in units of the first Bravais lattice vector. 
-		int a1; ///< Coordinate in units of the second Bravais lattice vector. 
-		int a2; ///< Coordinate in units of the third Bravais lattice vector. 
-		int b; ///< Basis site index. 
+		int a0; ///< 以第一布拉维晶格向量为单位的坐标. 
+		int a1; ///< 以第二布拉维晶格向量为单位的坐标. 
+		int a2; ///< 以第三布拉维晶格向量为单位的坐标. 
+		int b; ///< 基础位点索引. 
 	};
 
 	/**
-	 * @brief Representation of a lattice bond. 
+	 * @brief 晶格键的表示. 
 	 */
 	struct LatticeBond
 	{
 	public:
 		/**
-		 * @brief Construct a well-defined lattice bond object. 
+		 * @brief 构建明确定义的晶格键对象. 
 		 * 
-		 * @param fromB Basis index of the site from which the bond emanates.  
-		 * @param toB Basis index of the site which the bond connects to.  
-		 * @param da0 Difference of the two connecting sites in units of the first Bravais lattice vector. 
-		 * @param da1 Difference of the two connecting sites in units of the second Bravais lattice vector. 
-		 * @param da2 Difference of the two connecting sites in units of the third Bravais lattice vector. 
+		 * @param fromB 指的是从其中一端发出键的位点的基础索引.  
+		 * @param toB 键连接到的位点的基础索引.  
+		 * @param da0 以第一布拉维晶格向量为单位的两个连接位点的差异. 
+		 * @param da1 以第二布拉维晶格向量为单位的两个连接位点的差异. 
+		 * @param da2 以第三布拉维晶格向量为单位的两个连接位点的差异. 
 		 */
 		LatticeBond(const int fromB, const int toB, const int da0, const int da1, const int da2);
 
 		/**
-		 * @brief Determine whether the lattice bond is attached to a specified site. 
+		 * @brief 确定晶格键是否附着在指定位点. 
 		 * 
-		 * @param site Site to test. 
-		 * @return bool Returns true if one of the ends of the lattice bond is connected the the specified site. Returns false otherwise. 
+		 * @param site 测试位点. 
+		 * @return bool 如果晶格键的一端连接到指定位置，则返回 true。否则返回 false. 
 		 */
 		bool isAttachedToSite(const LatticeSite& site) const;
 
 		/**
-		 * @brief Determine whether the lattice bond is connecting two specified sites, ignoring the orientation of the bond. 
+		 * @brief 确定晶格键是否连接两个指定位点，忽略键的方向. 
 		 * 
-		 * @param site1 First lattice site. 
-		 * @param site2 Second lattice site. 
-		 * @return bool Returns true if the bond connects the two sites, returns false otherwise. 
+		 * @param site1 第一个位点. 
+		 * @param site2 第二格位点. 
+		 * @return bool 如果键连接两个位点则返回 true，否则返回 false. 
 		 */
 		bool isConnectingSites(const LatticeSite& site1, const LatticeSite& site2) const;
 
 		/**
-		 * @brief Determine whether the lattice bond is connecting two specified sites, checking also the orientation of the bond. 
+		 * @brief 确定晶格键是否连接两个指定位置，同时检查键的方向. 
 		 * 
-		 * @param siteFrom Site from which the bond should emanate. 
-		 * @param siteTo Site to which the bond should connect. 
-		 * @return bool Returns true if the bonds connects the two sites, returns false otherwise. 
+		 * @param siteFrom 晶格键应发出的位点. 
+		 * @param siteTo 晶格键应连接到的位点. 
+		 * @return bool 如果键连接两个位点则返回 true，否则返回 false. 
 		 */
 		bool isConnectingFromTo(const LatticeSite& siteFrom, const LatticeSite& siteTo) const;
 
 		/**
-		 * @brief Given one lattice site, determine the other site which the bond is connected to. 
-		 * If the site is connecte to the specified lattice sites multiple times (i.e. in a lattice with a monoatomic basis), returns all other connecting sites. 
+		 * @brief 给定一个晶格位点，确定该键连接到的另一个位点. 
+		 * 如果该位点多次连接到指定的晶格位点（即在具有单原子基础的晶格中），则返回所有其他连接位点. 
 		 * 
-		 * @param site First lattice site. 
-		 * @return std::vector<LatticeSite> Other sites which the bond is connected to. 
+		 * @param site 第一个位点. 
+		 * @return std::vector<LatticeSite> 晶格键连接到的其他位点. 
 		 */
 		std::vector<LatticeSite> getOtherEnd(const LatticeSite& site) const;
 
@@ -118,7 +118,7 @@ namespace LatticeModelFactory
 	};
 
 	/**
-	 * @brief Representation of a lattice unit cell. 
+	 * @brief 晶格晶胞的表示. 
 	 */
 	struct LatticeUnitCell
 	{

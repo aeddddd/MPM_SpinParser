@@ -1,5 +1,37 @@
-[![](https://github.com/fbuessen/SpinParser/actions/workflows/test.yml/badge.svg)](https://github.com/fbuessen/SpinParser/actions/workflows/test.yml)
-[![](https://github.com/fbuessen/SpinParser/actions/workflows/deploy.yml/badge.svg)](https://fbuessen.github.io/SpinParser)
+# 介绍
+项目基于 SpinParser 软件包
+- 由于软件包所提供的功能不足以满足我们所需要,于是有了这个项目
+- 为了便于开发,原项目中的注释大多都替换为中文注释
+- 原项目提供了 3 个对称性可供使用:SU(2),XYZ,TRI
+- 我们计划向其中加入空间反演与谷(Valley)的影响
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+下面是原文档
+
+
+
+
+
 
 # SpinParser
 SpinParser ("Spin Pseudofermion Algorithms for Research on Spin Ensembles via Renormalization") is a software platform to perform pseudofermion functional renormalization group (pf-FRG) calculations to solve lattice spin models of quantum magnetism. 
