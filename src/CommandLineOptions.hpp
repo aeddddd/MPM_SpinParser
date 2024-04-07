@@ -10,7 +10,7 @@
 #include <string>
 
 /**
- * @brief 解析器对象，可以提供 argc/argv 信息，然后将解析的值保存在其成员变量中. 
+ * @brief 解析器对象,可以提供 argc/argv 信息,然后将解析的值保存在其成员变量中. 
  */
 class CommandLineOptions
 {
@@ -26,14 +26,14 @@ public:
 	/**
 	 * @brief 检索“--help”标志设置. 
 	 * 
-	 * @return bool 如果设置了“--help”标志，则返回 true。否则，返回 false.
+	 * @return bool 如果设置了“--help”标志,则返回 true.否则,返回 false.
 	 */
 	bool help() const;
 
 	/**
 	 * @brief 检索“--verbose”标志设置. 
 	 * 
-	 * @return bool 如果设置了“--verbose”标志，则返回 true。否则返回 false.
+	 * @return bool 如果设置了“--verbose”标志,则返回 true.否则返回 false.
 	 */
 	bool verbose() const;
 
@@ -47,21 +47,21 @@ public:
 	/**
 	 * @brief 检索“--force Restart”标志设置. 
 	 * 
-	 * @return bool 如果设置了“--force Restart”标志，则返回 true。否则返回 false.
+	 * @return bool 如果设置了“--force Restart”标志,则返回 true.否则返回 false.
 	 */
 	bool forceRestart() const;
 
 	/**
 	 * @brief 检索“--defer”标志设置. 
 	 * 
-	 * @return bool 如果设置了“--defer”标志，则返回 true。否则返回 false.
+	 * @return bool 如果设置了“--defer”标志,则返回 true.否则返回 false.
 	 */
 	bool deferMeasurements() const;
 
 	/**
 	 * @brief 检索“--debug Lattice”标志设置. 
 	 * 
-	 * @return bool 如果设置了“--debug Lattice”标志，则返回 true。否则返回 false.
+	 * @return bool 如果设置了“--debug Lattice”标志,则返回 true.否则返回 false.
 	 */
 	bool debugLattice() const;
 

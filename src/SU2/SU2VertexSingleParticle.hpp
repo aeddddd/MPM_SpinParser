@@ -1,7 +1,7 @@
 /**
  * @file SU2VertexSingleParticle.hpp
  * @author Finn Lasse Buessen
- * @brief Single-particle vertex implementation for SU(2) models.
+ * @brief SU(2) 模型的单粒子顶点实现。
  * 
  * @copyright Copyright (c) 2020
  */
@@ -12,26 +12,26 @@
 #include "FrgCommon.hpp"
 
 /**
- * @brief Single-particle vertex implementation for SU(2) models.
+ * @brief SU(2) 模型的单粒子顶点实现.
  */
 struct SU2VertexSingleParticle
 {
 public:
 	/**
-	 * @brief Construct a new SU2VertexSingleParticle object and initialize all values to zero. 
+	 * @brief 构造一个新的 SU2Vertex Single Particle 对象并将所有值初始化为零. 
 	 */
 	SU2VertexSingleParticle()
 	{
-		//set size
+		//设置尺寸
 		size = FrgCommon::frequency().size;
 
-		//alloc and init memory
+		//分配和初始化内存
 		_data = new float[size];
 		for (int i = 0; i < size; ++i) _data[i] = 0.0f;
 	}
 
 	/**
-	 * @brief Destroy the SU2VertexSingleParticle object. 
+	 * @brief 销毁 SU2Vertex 单粒子对象. 
 	 */
 	~SU2VertexSingleParticle()
 	{
@@ -39,10 +39,10 @@ public:
 	}
 
 	/**
-	 * @brief Expand a linear iterator in the range [0,SU2VertexSingleParticle::size). 
+	 * @brief 在 [0,SU2VertexSingleParticle::size) 范围内展开线性迭代器. 
 	 * 
-	 * @param[in] iterator Iterator to expand. 
-	 * @param[out] w Frequency argument described by the iterator. 
+	 * @param[in] iterator 迭代器进行扩展. 
+	 * @param[out] w 迭代器描述的频率参数. 
 	 */
 	void expandIterator(const int iterator, float &w) const
 	{
@@ -52,10 +52,10 @@ public:
 	}
 
 	/**
-	 * @brief Directly access a vertex value by reference via a linear iterator in the range [0,SU2VertexSingleParticle::size). 
+	 * @brief 通过 [0,SU2Vertex Single Particle::size) 范围内的线性迭代器通过引用直接访问顶点值. 
 	 * 
-	 * @param iterator Linear iterator. 
-	 * @return float& Vertex value. 
+	 * @param iterator 线性迭代器. 
+	 * @return float& 顶点值. 
 	 */
 	float &getValueRef(const int iterator) const
 	{
@@ -65,10 +65,10 @@ public:
 	}
 
 	/**
-	 * @brief Access vertex value at arbitrary frequency value by performing a linear interpolation on the FrequencyDiscretization. 
+	 * @brief 通过对频率离散化执行线性插值来访问任意频率值的顶点值. 
 	 * 
-	 * @param w Frequency argument. 
-	 * @return float Vertex value. 
+	 * @param w 频率参数. 
+	 * @return float 顶点值. 
 	 */
 	float getValue(float w) const
 	{
@@ -87,10 +87,10 @@ public:
 	}
 
 	/**
-	 * @brief Access vertex value at given frequency mesh point. 
+	 * @brief 访问给定频率网格点的顶点值. 
 	 * 
-	 * @param wOffset Linear offset on the frequency mesh. 
-	 * @return float& Vertex value. 
+	 * @param wOffset 频率网格上的线性偏移. 
+	 * @return float& 顶点值. 
 	 */
 	float &_directAccess(const int wOffset) const
 	{
@@ -99,6 +99,6 @@ public:
 		return _data[wOffset];
 	}
 
-	int size; ///< Total number of vertex elements. 
-	float *_data; ///< Vertex data. 
+	int size; ///< 顶点元素总数. 
+	float *_data; ///< 顶点数据. 
 };

@@ -54,7 +54,7 @@ namespace Timestamp
 	 *
 		@param time 时间对象.
 		@param offset 年龄阈值（以秒为单位）.
-		@return bool 如果时间对象早于指定的秒数，则返回 true。否则返回 false.
+		@return bool 如果时间对象早于指定的秒数,则返回 true.否则返回 false.
 	 */
 	inline bool isOlder(const Time &time, const int offset)
 	{

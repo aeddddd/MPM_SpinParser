@@ -1,7 +1,7 @@
 /**
  * @file SU2VertexTwoParticle.hpp
  * @author Finn Lasse Buessen
- * @brief Two-particle vertex implementation for SU(2) models.
+ * @brief SU(2) 模型的两粒子顶点实现.
  * 
  * @copyright Copyright (c) 2020
  */
@@ -13,45 +13,45 @@
 #include "FrgCommon.hpp"
 
 /**
- * @brief Buffer for frequency interpolation information. 
- * @details The buffer contains a list of memory offsets (number of elements) in the frequency dimensions of the two-particle vertex that correspond to all the support values that are part of the interpolation. 
- * The memory offset in frequency space must be complemented with the linear memory offset in the lattice site dimension. 
- * Each support value is assigned a weight factor. 
- * Each support value is also complemented by a sign factor that is either +1 or -1 and by the information whether a lattice site exchange should be performed upon accessing the support value. 
+ * @brief 频率插值信息缓冲区. 
+ * @details 缓冲区包含两粒子顶点频率维度中的内存偏移量（元素数量）列表，这些偏移量对应于作为插值一部分的所有支持值. 
+ * 频率空间中的内存偏移必须与晶格位点维度中的线性内存偏移互补. 
+ * 每个支持值都分配有一个权重因子. 
+ * 每个支持值还由+1或-1的符号因子以及访问支持值时是否应执行网格站点交换的信息进行补充. 
  * 
- * @tparam size Number of support sites for the interpolation. 
+ * @tparam size 用于插值的支持位点数量. 
  */
 template <int size> struct SU2VertexTwoParticleAccessBuffer
 {
 public:
 	/**
-	 * @brief Construct an uninitialized SU2VertexTwoParticleAccessBuffer object. 
+	 * @brief 构造未初始化的 SU2Vertex 二粒子访问缓冲区对象. 
 	 */
 	SU2VertexTwoParticleAccessBuffer() : siteExchange(false) {}
 
-	int frequencyOffsets[size]; ///< Linear memory offset (number of elements) in the frequency dimensions of the two-particle vertex.  
-	float frequencyWeights[size]; ///< Weight factors of the support values. 
-	int signFlag[size]; ///< Sign factors of the support values. 
-	bool siteExchange; ///< Site exchange indicator. 
+	int frequencyOffsets[size]; ///< 双粒子顶点频率维度中的线性记忆偏移（元素数量）.  
+	float frequencyWeights[size]; ///< 支持值的权重因子. 
+	int signFlag[size]; ///< 支持值的符号因子. 
+	bool siteExchange; ///< 位点交换指标. 
 };
 
 /**
- * @brief Two-particle vertex implementation for SU(2) models.
+ * @brief SU(2) 模型的两粒子顶点实现.
  */
 struct SU2VertexTwoParticle
 {
 public:
 	/**
-	 * @brief Enumeration of the different vertex channels. 
+	 * @brief 不同顶点通道的枚举. 
 	 */
 	enum struct Symmetry : int
 	{
-		Spin = 0, ///< Spin-type vertex. 
-		Density = 1 ///< Density-type vertex. 
+		Spin = 0, ///< 自旋型顶点. 
+		Density = 1 ///< 密度型顶点. 
 	};
 
 	/**
-	 * @brief Indicator for frequency channels that exactly lie on frequency mesh points.  
+	 * @brief 准确位于频率网格点上的频道指示器.  
 	 */
 	enum struct FrequencyChannel
 	{
@@ -63,18 +63,18 @@ public:
 	};
 
 	/**
-	 * @brief Construct a new SU2VertexTwoParticle object and initialize all entries to zero. 
+	 * @brief 构造一个新的 SU2Vertex 二粒子对象并将所有条目初始化为零. 
 	 */
 	SU2VertexTwoParticle()
 	{
-		//store width in all memory dimensions
+		//在所有内存维度中存储宽度
 		_memoryStepLattice = FrgCommon::lattice().size;
 		_memoryStepLatticeT = _memoryStepLattice * FrgCommon::frequency().size;
 
 		sizeFrequency = FrgCommon::frequency().size * FrgCommon::frequency().size * (FrgCommon::frequency().size + 1) / 2;
 		size = FrgCommon::lattice().size * sizeFrequency;
 
-		//alloc and init memory
+		//分配和初始化内存
 		_dataSS = new float[size];
 		_dataDD = new float[size];
 		memset(_dataSS, 0, sizeof(float) * size);
@@ -82,7 +82,7 @@ public:
 	}
 
 	/**
-	 * @brief Destroy the SU2VertexTwoParticle object. 
+	 * @brief 销毁 SU2Vertex 两个粒子对象. 
 	 */
 	~SU2VertexTwoParticle()
 	{
@@ -91,13 +91,13 @@ public:
 	}
 
 	/**
-	 * @brief Expand a linear iterator in the range [0,size) that iterates over all vertex entries. 
+	 * @brief 在 [0,size) 范围内展开一个线性迭代器，迭代所有顶点条目. 
 	 * 
-	 * @param[in] iterator Linear iterator. 
-	 * @param[out] i1 Lattice site iterator. 
-	 * @param[out] s First frequency argument. 
-	 * @param[out] t Second frequency argument. 
-	 * @param[out] u Third frequency argument. 
+	 * @param[in] iterator 线性迭代器. 
+	 * @param[out] i1 格点迭代器. 
+	 * @param[out] s 第一频率参数. 
+	 * @param[out] t 第二频率参数. 
+	 * @param[out] u 第三频率参数. 
 	 */
 	void expandIterator(int iterator, LatticeIterator &i1, float &s, float &t, float &u) const
 	{
@@ -126,12 +126,12 @@ public:
 	}
 
 	/**
-	 * @brief Expand a linear iterator in the range [0,sizeFrequency) that iterates over all paramtetrized frequency values. 
+	 * @brief 在 [0,sizeFrequency) 范围内展开线性迭代器，迭代所有参数化频率值. 
 	 * 
-	 * @param[in] iterator Linear iterator. 
-	 * @param[out] s First frequency argument. 
-	 * @param[out] t Second frequency argument. 
-	 * @param[out] u Third frequency argument. 
+	 * @param[in] iterator 线性迭代器. 
+	 * @param[out] s 第一频率参数. 
+	 * @param[out] t 第二频率参数. 
+	 * @param[out] u 第三频率参数. 
 	 */
 	void expandIterator(int iterator, float &s, float &t, float &u) const
 	{
@@ -158,11 +158,11 @@ public:
 	}
 
 	/**
-	 * @brief Directly access a vertex value via a linear iterator in the range [0,size). 
+	 * @brief 通过线性迭代器直接访问 [0,size) 范围内的顶点值. 
 	 * 
-	 * @param iterator Linear iterator. 
-	 * @param symmetry Vertex channel. 
-	 * @return float& Vertex value. 
+	 * @param iterator 线性迭代器. 
+	 * @param symmetry 顶点通道. 
+	 * @return float& 顶点值. 
 	 */
 	float &getValueRef(const int iterator, const SU2VertexTwoParticle::Symmetry symmetry) const
 	{
@@ -171,20 +171,20 @@ public:
 	}
 
 	/**
-	 * @brief Access vertex value at arbitrary lattice sites, frequencies, and symmetry. 
+	 * @brief 访问任意晶格位置、频率和对称性处的顶点值. 
 	 * 
-	 * @param i1 First lattice site argument. 
-	 * @param i2 Second lattice site argument. 
-	 * @param s First frequency argument. 
-	 * @param t Second frequency argument. 
-	 * @param u Third frequency argument. 
-	 * @param symmetry Vertex channel. 
-	 * @param channel Frequency channel. 
-	 * @return float Vertex value. 
+	 * @param i1 第一个格点参数. 
+	 * @param i2 第二个格点参数. 
+	 * @param s 第一频率参数. 
+	 * @param t 第二频率参数. 
+	 * @param u 第三频率参数. 
+	 * @param symmetry 顶点通道. 
+	 * @param channel 频率通道. 
+	 * @return float 顶点值. 
 	 */
 	float getValue(LatticeIterator i1, LatticeIterator i2, float s, float t, float u, const SU2VertexTwoParticle::Symmetry symmetry, const SU2VertexTwoParticle::FrequencyChannel channel) const
 	{
-		//map to positive frequency sector
+		//映射到正频率扇区
 		if (s < 0 && u < 0)
 		{
 			s = -s;
@@ -310,14 +310,14 @@ public:
 	}
 
 	/**
-	 * @brief Access vertex value at arbitrary lattice sites and symmetry via a given access buffer. 
+	 * @brief 通过给定的访问缓冲区访问任意晶格位置处的顶点值和对称性. 
 	 * 
-	 * @tparam n Number of support sites in the access buffer. 
-	 * @param i1 First lattice site argument. 
-	 * @param i2 Second lattice site argument. 
-	 * @param symmetry Vertex channel. 
-	 * @param accessBuffer Access buffer. 
-	 * @return float Vertex value. 
+	 * @tparam n 访问缓冲区中支持站点的数量. 
+	 * @param i1 第一个格点参数. 
+	 * @param i2 第二个格点参数. 
+	 * @param symmetry 顶点通道. 
+	 * @param accessBuffer 访问缓冲区. 
+	 * @return float 顶点值. 
 	 */
 	template <int n> float getValue(const LatticeIterator i1, const LatticeIterator i2, const SU2VertexTwoParticle::Symmetry symmetry, const SU2VertexTwoParticleAccessBuffer<n> &accessBuffer) const
 	{
@@ -337,12 +337,12 @@ public:
 	}
 
 	/**
-	 * @brief Access vertex value locally at arbitrary symmetry via a given access buffer
+	 * @brief 通过给定的访问缓冲区以任意对称性本地访问顶点值
 	 * 
-	 * @tparam n Number of support sites in the access buffer. 
-	 * @param symmetry Vertex channel. 
-	 * @param accessBuffer Access buffer. 
-	 * @return float Vertex value. 
+	 * @tparam n 访问缓冲区中支持站点的数量. 
+	 * @param symmetry 顶点通道. 
+	 * @param accessBuffer 访问缓冲区. 
+	 * @return float 顶点值. 
 	 */
 	template <int n> float getValueLocal(const SU2VertexTwoParticle::Symmetry symmetry, const SU2VertexTwoParticleAccessBuffer<n> &accessBuffer) const
 	{
@@ -360,11 +360,11 @@ public:
 	}
 
 	/**
-	 * @brief Bundled vertex access on all lattice sites and symmetries simultaneously via a given access buffer. 
+	 * @brief 通过给定的访问缓冲区同时对所有晶格位置和对称性进行捆绑顶点访问. 
 	 * 
-	 * @tparam n Number of support sites in the access buffer. 
-	 * @param[in] accessBuffer Access buffer. 
-	 * @param[out] superbundle Vertex value bundle. 
+	 * @tparam n 访问缓冲区中支持站点的数量. 
+	 * @param[in] accessBuffer 访问缓冲区. 
+	 * @param[out] superbundle 顶点值束. 
 	 */
 	template <int n> void getValueSuperbundle(const SU2VertexTwoParticleAccessBuffer<n> &accessBuffer, ValueSuperbundle<float, 2> &superbundle) const
 	{
@@ -387,14 +387,14 @@ public:
 	}
 
 	/**
-	 * @brief Generate an access buffer for a set of frequencies where one of them (specified by channel) exactly lies on the frequency mesh. 
-	 * Frequency channel must be either FrequencyChannel::S, FrequencyChannel::T, FrequencyChannel::U. 
+	 * @brief 为一组频率生成访问缓冲区，其中一个频率（由通道指定）恰好位于频率网格上. 
+	 * 频率通道必须是 FrequencyChannel::S, FrequencyChannel::T, FrequencyChannel::U. 
 	 * 
-	 * @param s First frequency argument. 
-	 * @param t Second frequency argument. 
-	 * @param u Third frequency argument. 
-	 * @param channel Frequency channel. 
-	 * @return SU2VertexTwoParticleAccessBuffer<4> Access buffer. 
+	 * @param s 第一频率参数. 
+	 * @param t 第二频率参数. 
+	 * @param u 第三频率参数. 
+	 * @param channel 频率通道. 
+	 * @return SU2VertexTwoParticleAccessBuffer<4> 访问缓冲区. 
 	 */
 	SU2VertexTwoParticleAccessBuffer<4> generateAccessBuffer(float s, float t, float u, const SU2VertexTwoParticle::FrequencyChannel channel) const
 	{
@@ -402,7 +402,7 @@ public:
 
 		SU2VertexTwoParticleAccessBuffer<4> accessBuffer;
 
-		//map to positive frequency sector
+		//映射到正频率扇区
 		if (s < 0 && u < 0)
 		{
 			s = -s;
@@ -426,7 +426,7 @@ public:
 			t = -t;
 		}
 
-		//interpolate frequency
+		//插值频率
 		if (channel == SU2VertexTwoParticle::FrequencyChannel::S)
 		{
 			int exactS = FrgCommon::frequency().offset(s);
@@ -490,18 +490,18 @@ public:
 	}
 
 	/**
-	 * @brief Generate an access buffer for an arbitrary set of frequencies.  
+	 * @brief 为任意一组频率生成访问缓冲区.  
 	 * 
-	 * @param s First frequency argument. 
-	 * @param t Second frequency argument. 
-	 * @param u Third frequency argument. 
-	 * @return SU2VertexTwoParticleAccessBuffer<8> Access buffer. 
+	 * @param s 第一频率参数. 
+	 * @param t 第二频率参数. 
+	 * @param u 第三频率参数. 
+	 * @return SU2VertexTwoParticleAccessBuffer<8> 访问缓冲区. 
 	 */
 	SU2VertexTwoParticleAccessBuffer<8> generateAccessBuffer(float s, float t, float u) const
 	{
 		SU2VertexTwoParticleAccessBuffer<8> accessBuffer;
 
-		//map to positive frequency sector
+		//映射到正频率扇区
 		if (s < 0 && u < 0)
 		{
 			s = -s;
@@ -557,14 +557,14 @@ public:
 	}
 
 	/**
-	 * @brief Directly access a vertex via given frequency and site offsets, where sOffset may be lesser than uOffset. 
+	 * @brief 通过给定频率和站点偏移量直接访问顶点，其中 s Offset 可能小于 u Offset. 
 	 * 
-	 * @param siteOffset Lattice site offset (number of elements). 
-	 * @param sOffset First frequency offset (number of elements). 
-	 * @param tOffset Second frequency offset (number of elements). 
-	 * @param uOffset Third frequency offset (number of elements). 
-	 * @param symmetry Vertex channel. 
-	 * @return float Vertex value. 
+	 * @param siteOffset 晶格位置偏移（元素数量）. 
+	 * @param sOffset 第一频率偏移（元素数量）. 
+	 * @param tOffset 第二频率偏移（元素数量）. 
+	 * @param uOffset 第三频率偏移（元素数量）. 
+	 * @param symmetry 顶点通道. 
+	 * @return float 顶点值. 
 	 */
 	float _directAccessMapFrequencyExchange(const int siteOffset, const int sOffset, const int tOffset, const int uOffset, const SU2VertexTwoParticle::Symmetry symmetry) const
 	{
@@ -583,14 +583,14 @@ public:
 	}
 
 	/**
-	 * @brief Directly access a vertex via given frequency and site offsets, where sOffset >= uOffset. 
+	 * @brief 通过给定频率和站点偏移直接访问顶点，其中 s Offset >= u Offset. 
 	 * 
-	 * @param siteOffset Lattice site offset (number of elements). 
-	 * @param sOffset First frequency offset (number of elements). 
-	 * @param tOffset Second frequency offset (number of elements). 
-	 * @param uOffset Third frequency offset (number of elements). 
-	 * @param symmetry Vertex channel. 
-	 * @return float Vertex value. 
+	 * @param siteOffset 晶格位置偏移（元素数量）. 
+	 * @param sOffset 第一频率偏移（元素数量）. 
+	 * @param tOffset 第二频率偏移（元素数量）. 
+	 * @param uOffset 第三频率偏移（元素数量）. 
+	 * @param symmetry 顶点通道. 
+	 * @return float 顶点值. 
 	 */
 	float _directAccess(const int siteOffset, const int sOffset, const int tOffset, const int uOffset, const SU2VertexTwoParticle::Symmetry symmetry) const
 	{
@@ -605,13 +605,13 @@ public:
 	}
 
 	/**
-	 * @brief Calculate the total memory offset (number of elements) from given frequency offsets, where sOffset may be lesser than uOffset. 
+	 * @brief 根据给定的频率偏移计算总内存偏移（元素数量），其中 s Offset 可能小于 u Offset. 
 	 * 
-	 * @param[in] sOffset First frequency offset (number of elements). 
-	 * @param[in] tOffset Second frequency offset (number of elements). 
-	 * @param[in] uOffset Third frequency offset (number of elements). 
-	 * @param[out] signFlag Sign flag to be stored in the access buffer. 
-	 * @return int Memory offset (number of elements). 
+	 * @param[in] sOffset 第一频率偏移（元素数量）. 
+	 * @param[in] tOffset 第二频率偏移（元素数量）. 
+	 * @param[in] uOffset 第三频率偏移（元素数量）. 
+	 * @param[out] signFlag 要存储在访问缓冲区中的符号标志. 
+	 * @return int 内存偏移量（元素数量）. 
 	 */
 	int _generateAccessBufferOffset(const int sOffset, const int tOffset, const int uOffset, int &signFlag) const
 	{
@@ -631,11 +631,11 @@ public:
 		}
 	}
 
-	int size; ///< Size of the vertex per vertex channel (number of elements). 
-	int sizeFrequency; ///< Size of the vertex per vertex channel in the frequency subspace (number of elements). 
+	int size; ///< 每个顶点通道的顶点大小（元素数量）. 
+	int sizeFrequency; ///< 频率子空间中每个顶点通道的顶点大小（元素数量）. 
 
-	float *_dataSS; ///< Spin channel of the vertex. 
-	float *_dataDD; ///< Density channel of the vertex. 
-	int _memoryStepLatticeT; ///< Memory stride width in the last-2 dimension. 
-	int _memoryStepLattice; ///< Memory stride width in the last-1 dimension. 
+	float *_dataSS; ///< 顶点的自旋通道. 
+	float *_dataDD; ///< 顶点的密度通道. 
+	int _memoryStepLatticeT; ///< 最后 2 维中的内存步幅宽度. 
+	int _memoryStepLattice; ///< 最后一维的内存步幅宽度. 
 };

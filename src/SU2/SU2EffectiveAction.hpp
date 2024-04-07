@@ -1,7 +1,7 @@
 /**
  * @file SU2EffectiveAction.hpp
  * @author Finn Lasse Buessen
- * @brief Implementation of a flowing effective action for SU(2) models.  
+ * @brief SU(2) 模型的流动有效动作的实现.  
  * 
  * @copyright Copyright (c) 2020
  */
@@ -14,13 +14,13 @@
 #include "SU2VertexTwoParticle.hpp"
 
 /**
- * @brief Implementation of a flowing effective action for SU(2) models.  
+ * @brief 为 SU(2) 模型实施流动有效的行动. 
  */
 struct SU2EffectiveAction : public EffectiveAction
 {
 public:
 	/**
-	 * @brief Construct a new SU2EffectiveAction object. 
+	 * @brief 构造一个新的 SU2Effective Action 对象. 
 	 */
 	SU2EffectiveAction()
 	{
@@ -29,18 +29,18 @@ public:
 	}
 
 	/**
-	 * @brief Construct a new effective action and initialize values at given cutoff for a given spin model. 
+	 * @brief 为给定的自旋模型构造一个新的有效动作并在给定的截止值处初始化值. 
 	 * 
-	 * @param cutoff Cutoff value to initialize. 
-	 * @param spinModel Spin model to initialize. 
-	 * @param core Reference to the FRGCore which creates the object. 
+	 * @param cutoff 初始化的截止值. 
+	 * @param spinModel 自旋模型初始化. 
+	 * @param core 引用创建对象的 FRGCore. 
 	 */
 	SU2EffectiveAction(const float cutoff, const SpinModel &spinModel, const SU2FrgCore *core)
 	{
 		vertexSingleParticle = new SU2VertexSingleParticle;
 		vertexTwoParticle = new SU2VertexTwoParticle;
 
-		//set initial value
+		//设置初始值
 		this->cutoff = cutoff;
 
 		for (int linearIterator = 0; linearIterator < vertexTwoParticle->size; ++linearIterator)
@@ -60,7 +60,7 @@ public:
 	}
 
 	/**
-	 * @brief Destroy the SU2EffectiveAction object. 
+	 * @brief 销毁 SU2Effective Action 对象. 
 	 */
 	~SU2EffectiveAction()
 	{
@@ -69,24 +69,24 @@ public:
 	}
 
 	/**
-	 * @brief Write checkpoint file. 
+	 * @brief 写入检查点文件. 
 	 * 
-	 * @param dataFilePath Checkpoint file path. 
-	 * @param append Append flag. 
+	 * @param dataFilePath 检查点文件路径. 
+	 * @param append 附加标志. 
 	 *
-	 * @return int Checkpoint identifier of the checkpoint written.
+	 * @return int 写入的检查点的检查点标识符.
 	 */
 	int writeCheckpoint(const std::string &dataFilePath, const bool append = false) const override
 	{
 		H5Eset_auto(H5E_DEFAULT, NULL, NULL);
 		hid_t file;
 
-		//open or create file
+		//打开或创建文件
 		if (append && H5Fis_hdf5(dataFilePath.c_str()) > 0) file = H5Fopen(dataFilePath.c_str(), H5F_ACC_RDWR, H5P_DEFAULT);
 		else file = H5Fcreate(dataFilePath.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT);
 		if (file < 0) throw Exception(Exception::Type::IOError, "Could not open data file for writing");
 
-		//determine new checkpoint id
+		//确定新的检查点 ID
 		hsize_t numObjects;
 		H5Gget_num_objs(file, &numObjects);
 		int checkpointId = 0;
@@ -117,7 +117,7 @@ public:
 		}
 		std::string checkpointName = "checkpoint_" + std::to_string(checkpointId);
 
-		//create checkpoint group
+		//创建检查点组
 		hid_t group = H5Gcreate(file, checkpointName.c_str(), H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
 		hsize_t attrSpaceSize[1] = { 1 };
 		const int attrSpaceDim = 1;
@@ -127,7 +127,7 @@ public:
 		H5Aclose(attr);
 		H5Sclose(attrSpace);
 
-		//write vertex data
+		//写入顶点数据
 		auto writeCheckpointDataset = [&group](const std::string &identifier, const int size, const float *data)
 		{
 			const int dataSpaceDim = 1;
@@ -143,28 +143,28 @@ public:
 		writeCheckpointDataset("v4dd", vertexTwoParticle->size, vertexTwoParticle->_dataDD);
 		writeCheckpointDataset("v4ss", vertexTwoParticle->size, vertexTwoParticle->_dataSS);
 
-		//clean up and return
+		//清理并返回
 		H5Gclose(group);
 		H5Fclose(file);
 		return checkpointId;
 	}
 
 	/**
-	 * @brief Read checkpoint from file. 
+	 * @brief 从文件中读取检查点. 
 	 * 
-	 * @param dataFilePath Checkpoint file path. 
-	 * @param checkpointId Identifier of the checkpoint to read. 
-	 * @return bool Returns true if the checkpoint was read successfully, false otherwise. 
+	 * @param dataFilePath 检查点文件路径. 
+	 * @param checkpointId 要读取的检查点的标识符. 
+	 * @return bool 如果检查点读取成功则返回 true，否则返回 false. 
 	 */
 	bool readCheckpoint(const std::string &dataFilePath, const int checkpointId) override
 	{
 		H5Eset_auto(H5E_DEFAULT, NULL, NULL);
 
-		//open file
+		//打开文件
 		hid_t file = H5Fopen(dataFilePath.c_str(), H5F_ACC_RDONLY, H5P_DEFAULT);
 		if (file < 0) throw Exception(Exception::Type::IOError, "Could not open data file for reading");
 
-		//find desired dataset name
+		//找到所需的数据集名称
 		std::string checkpointName;
 		if (checkpointId >= 0) checkpointName = "checkpoint_" + std::to_string(checkpointId);
 		else
@@ -184,7 +184,7 @@ public:
 		hid_t group = H5Gopen(file, checkpointName.c_str(), H5P_DEFAULT);
 		if (group < 0) return false;
 
-		//read dataset
+		//读取数据集
 		auto readDataset = [&group](const std::string &name, float *data)->bool
 		{
 			hid_t dataset = H5Dopen(group, name.c_str(), H5P_DEFAULT);
@@ -198,16 +198,16 @@ public:
 		if (!readDataset("v4dd", vertexTwoParticle->_dataDD)) return false;
 		if (!readDataset("v4ss", vertexTwoParticle->_dataSS)) return false;
 
-		//clean up and return
+		//清理并返回
 		H5Gclose(group);
 		H5Fclose(file);
 		return true;
 	}
 
 	/**
-	 * @brief Indicate whether the vertex has diverged to NaN. 
+	 * @brief 指示顶点是否已经发散到 Na N. 
 	 *
-	 * @return bool Return true if the vertex has diverged, otherwise return false. 
+	 * @return bool 如果顶点已发散，则返回 true，否则返回 false. 
 	 */
 	bool isDiverged() const override
 	{
@@ -229,6 +229,6 @@ public:
 		return false;
 	}
 
-	SU2VertexSingleParticle *vertexSingleParticle; ///< Single-particle vertex data. 
-	SU2VertexTwoParticle *vertexTwoParticle; ///< Two-particle vertex data. 
+	SU2VertexSingleParticle *vertexSingleParticle; ///< 单粒子顶点数据. 
+	SU2VertexTwoParticle *vertexTwoParticle; ///< 二粒子顶点数据. 
 };

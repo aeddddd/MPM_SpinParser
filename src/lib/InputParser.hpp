@@ -1,7 +1,7 @@
 /**
  * @file InputParser.hpp
  * @author Finn Lasse Buessen
- * @brief Parse input strings to numerical values. Can resolve simple multiplications and sqrt() expressions. 
+ * @brief 将输入字符串解析为数值.可以解析简单的乘法和 sqrt() 表达式. 
  * 
  * @copyright Copyright (c) 2020
  */
@@ -15,11 +15,11 @@
 namespace InputParser
 {
 	/**
-	 * @brief Parse input string to double. Resolves simple multiplications, divisions and sqrt() expressions. 
-	 * Input may involve terms of the form x*x, x/x, sqrt(x), and longer compositions thereof, where x is a decimal number. 
+	 * @brief 将输入字符串解析为Double.解决简单的乘法、除法和 sqrt() 表达式. 
+	 * 输入可能涉及 x*x、x/x、sqrt(x) 及其更长组合形式的项,其中 x 是十进制数. 
 	 * 
-	 * @param input Input string. 
-	 * @return double Parsed numerical value. 
+	 * @param input 输入字符串. 
+	 * @return double 解析后的数值. 
 	 */
 	inline double stringToDouble(const std::string &input)
 	{
@@ -56,11 +56,11 @@ namespace InputParser
 	}
 
 	/**
-	 * @brief Parse input string to double. Resolves simple multiplications, divisions and sqrt() expressions. 
-	 * Input may involve terms of the form x*x, x/x, and sqrt(x), where x is a decimal number. 
+	 * @brief 将输入字符串解析为float.解决简单的乘法、除法和 sqrt() 表达式. 
+	 * 输入可能涉及 x*x、x/x 和 sqrt(x) 形式的项,其中 x 是十进制数. 
 	 * 
-	 * @param input Input string. 
-	 * @return float Parsed numerical value. 
+	 * @param input 输入字符串. 
+	 * @return float 解析后的数值. 
 	 */
 	inline float stringToFloat(const std::string &input)
 	{

@@ -38,7 +38,7 @@ public:
 	 * @brief 迭代器比较
 	 * 
 	 * @param rhs 右侧操作数. 
-	 * @return bool 迭代器相等则返回 true，否则返回 false.  
+	 * @return bool 迭代器相等则返回 true,否则返回 false.  
 	 */
 	bool operator==(const CutoffIterator& rhs) const
 	{
@@ -49,7 +49,7 @@ public:
 	 * @brief 负迭代器比较
 	 * 
 	 * @param rhs 右侧操作数. 
-	 * @return bool 迭代器不相等返回 true，否则返回 false.   
+	 * @return bool 迭代器不相等返回 true,否则返回 false.   
 	 */
 	bool operator!=(const CutoffIterator& rhs) const
 	{

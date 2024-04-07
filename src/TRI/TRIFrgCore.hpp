@@ -16,7 +16,7 @@ class TRIFrgCore : public FrgCore
 {
 public:
 	/**
-	 * @brief 构造一个新的 TRIFrgCore，使用指定的自旋模型进行初始化并添加测量. 
+	 * @brief 构造一个新的 TRIFrgCore,使用指定的自旋模型进行初始化并添加测量. 
 	 * 
 	 * @param spinModel 自旋模型初始化有效动作. 
 	 * @param measurements 要添加的测量值. 
@@ -47,14 +47,14 @@ private:
 	int dataStacks[6]; ///<对 LoadManager::DataStack 的引用. 
 
 	/**
-	 * @brief 计算特定线性迭代器的单粒子顶点流，该迭代器通过 TRIVertexSingleParticle::expand Iterator() 进行扩展.
+	 * @brief 计算特定线性迭代器的单粒子顶点流,该迭代器通过 TRIVertexSingleParticle::expand Iterator() 进行扩展.
 	 * 
 	 * @param iterator 线性迭代器. 
 	 */
 	void _calculateVertexSingleParticle(const int iterator);
 
 	/**
-	 * @brief 计算特定线性迭代器的双粒子顶点流，该迭代器通过 TRIVertexTwoParticle::expand Iterator() 展开.
+	 * @brief 计算特定线性迭代器的双粒子顶点流,该迭代器通过 TRIVertexTwoParticle::expand Iterator() 展开.
 	 * 
 	 * @param iterator 线性迭代器. 
 	 */

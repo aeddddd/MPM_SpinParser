@@ -1,7 +1,7 @@
 /**
  * @file SU2MeasurementCorrelation.cpp
  * @author Finn Lasse Buessen
- * @brief Correlation measurement for SU(2) models.
+ * @brief SU(2) 模型的相关性测量.
  * 
  * @copyright Copyright (c) 2020
  */
@@ -23,11 +23,11 @@ SU2MeasurementCorrelation::SU2MeasurementCorrelation(const std::string &outfile,
 	for (auto i = FrgCommon::lattice().getRange(0); i != FrgCommon::lattice().end(); ++i) ++latticeSizeExtended;
 	int latticeSizeBasis = int(FrgCommon::lattice()._basis.size());
 
-	//prepare correlation buffer
+	//准备相关缓冲区
 	_correlationsZZ = new float[latticeSizeBasis * latticeSizeExtended];
 	_correlationsDD = new float[latticeSizeBasis * latticeSizeExtended];
 
-	//set up loadManager
+	//设置负载管理器
 	//stack0
 	HMP::StackIdentifier dataStack0 = SpinParser::spinParser()->getLoadManager()->addMasterStackExplicit<float>(
 		&_currentCutoff,
@@ -76,7 +76,7 @@ void SU2MeasurementCorrelation::takeMeasurement(const EffectiveAction &state, co
 
 void SU2MeasurementCorrelation::_calculateCorrelation(const int iterator) const
 {
-	//calculate real space susceptibility
+	//计算实空间磁化率
 	float nu = 0.0f;
 	float cut = SpinParser::spinParser()->getFrgCore()->flowingFunctional()->cutoff;
 	SU2FrgCore *core = static_cast<SU2FrgCore *>(SpinParser::spinParser()->getFrgCore());
@@ -90,13 +90,13 @@ void SU2MeasurementCorrelation::_calculateCorrelation(const int iterator) const
 	ValueSuperbundle<float, 2> buffer3(FrgCommon::lattice().size);
 	ValueSuperbundle<float, 2> buffer4(FrgCommon::lattice().size);
 
-	//integration kernel
+	//集成内核
 	std::function<void(float, ValueSuperbundle<float, 2> &)> integralKernel = [&](const float w, ValueSuperbundle<float, 2> &returnBuffer) -> void
 	{
 		returnBuffer.reset();
 
 		//term1
-		//remark: this term comes with a positive sign due to two i's appearing in the parametrization of the self energy
+		//备注：由于自能参数化中出现了两个 i，因此该项带有正号
 		float term1 = 1.0f / ((w + v2->getValue(w)) * (w + nu + v2->getValue(w + nu)));
 		//additional prefactor 2.0 * spinLength from generalization to arbitrary spin
 		returnBuffer.bundle(static_cast<int>(SU2VertexTwoParticle::Symmetry::Spin))[0] += core->spinLength * term1 / float(2.0f * M_PI);
@@ -176,19 +176,21 @@ void SU2MeasurementCorrelation::_calculateCorrelation(const int iterator) const
 	}
 }
 
+//以下为写入HDF5文件的函数,无需更改
+
 void SU2MeasurementCorrelation::_writeOutfileHeader(const std::string &observableGroup) const
 {
 	H5Eset_auto(H5E_DEFAULT, NULL, NULL);
 
-	//open file
+	//打开文件
 	hid_t file = H5Fopen(outfile().c_str(), H5F_ACC_RDWR, H5P_DEFAULT);
 	if (file < 0) throw Exception(Exception::Type::IOError, "Could not open observable file [" + outfile() + "] for writing.");
 
-	//open group
+	//打开组
 	hid_t group = H5Gopen(file, observableGroup.c_str(), H5P_DEFAULT);
 	if (group < 0) throw Exception(Exception::Type::IOError, "Could not open obsfile group [" + observableGroup + "] for writing. ");
 
-	//create meta group
+	//创建元组
 	if (H5Lexists(group, "meta", H5P_DEFAULT) == 0)
 	{
 		hid_t mgroup = H5Gcreate(group, "meta", H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
@@ -197,7 +199,7 @@ void SU2MeasurementCorrelation::_writeOutfileHeader(const std::string &observabl
 		const hsize_t dataTypeLatticeSiteSize[dataTypeLatticeSiteDim] = { 3 };
 		hid_t dataTypeLatticeSite = H5Tarray_create(H5T_NATIVE_FLOAT, dataTypeLatticeSiteDim, dataTypeLatticeSiteSize);
 
-		//write lattice vectors
+		//写出格子向量
 		float *latticeBuffer = new float[3 * 3];
 		int i = 0;
 		for (auto a = FrgCommon::lattice()._bravaisLattice.begin(); a != FrgCommon::lattice()._bravaisLattice.end(); ++a)
@@ -216,7 +218,7 @@ void SU2MeasurementCorrelation::_writeOutfileHeader(const std::string &observabl
 		H5Sclose(attrSpaceLattice);
 		delete[] latticeBuffer;
 
-		//write basis
+		//写基础
 		float *basisBuffer = new float[3 * FrgCommon::lattice()._basis.size()];
 		i = 0;
 		for (auto b = FrgCommon::lattice().getBasis(); b != FrgCommon::lattice().end(); ++b)
@@ -235,7 +237,7 @@ void SU2MeasurementCorrelation::_writeOutfileHeader(const std::string &observabl
 		H5Sclose(attrSpaceBasis);
 		delete[] basisBuffer;
 
-		//write sites
+		//写位点
 		int inRangeCount = 0;
 		for (SublatticeIterator i = FrgCommon::lattice().getRange(0); i != FrgCommon::lattice().end(); ++i) ++inRangeCount;
 
@@ -261,7 +263,7 @@ void SU2MeasurementCorrelation::_writeOutfileHeader(const std::string &observabl
 		H5Sclose(dataSpaceSitesReference);
 		delete[] SitesReferenceBuffer;
 
-		//close meta group
+		//关闭元组
 		H5Tclose(dataTypeLatticeSite);
 		H5Gclose(mgroup);
 	}
@@ -270,7 +272,7 @@ void SU2MeasurementCorrelation::_writeOutfileHeader(const std::string &observabl
 		Log::log << Log::LogLevel::Warning << "The observable output file [" + outfile() + "] already contains the group [" + observableGroup + "/meta]. Skipping writing this information. " << Log::endl;
 	}
 
-	//close file
+	//关闭文件
 	H5Gclose(group);
 	H5Fclose(file);
 }
@@ -279,22 +281,22 @@ void SU2MeasurementCorrelation::_writeOutfileCorrelation(const std::string &obse
 {
 	H5Eset_auto(H5E_DEFAULT, NULL, NULL);
 
-	//open or create file
+	//打开或创建文件
 	hid_t file = (H5Fis_hdf5(outfile().c_str()) > 0) ? H5Fopen(outfile().c_str(), H5F_ACC_RDWR, H5P_DEFAULT) : H5Fcreate(outfile().c_str(), H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT);
 	if (file < 0) throw Exception(Exception::Type::IOError, "Could not open observable file [" + outfile() + "] for writing");
 
-	//open or create group
+	//打开或创建组
 	hid_t group = (H5Lexists(file, observableGroup.c_str(), H5P_DEFAULT) > 0) ? H5Gopen(file, observableGroup.c_str(), H5P_DEFAULT) : H5Gcreate(file, observableGroup.c_str(), H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
 	if (group < 0) throw Exception(Exception::Type::IOError, "Could not open obsfile group [" + observableGroup + "] for writing");
 
-	//ensure that meta information is included
+	//确保包含元信息
 	if (H5Lexists(group, "meta", H5P_DEFAULT) == 0) _writeOutfileHeader(observableGroup);
 
-	//open or create data collection
+	//打开或创建数据集合
 	hid_t data = (H5Lexists(group, "data", H5P_DEFAULT) > 0) ? H5Gopen(group, "data", H5P_DEFAULT) : H5Gcreate(group, "data", H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
 	if (data < 0) throw Exception(Exception::Type::IOError, "Could not open obsfile group [" + observableGroup + "/data] for writing");
 
-	//determine unique dataset name and check for duplicate dataset
+	//确定唯一的数据集名称并检查重复的数据集
 	int datasetId = 0;
 	hsize_t numDatasets;
 	H5Gget_num_objs(data, &numDatasets);
@@ -324,7 +326,7 @@ void SU2MeasurementCorrelation::_writeOutfileCorrelation(const std::string &obse
 	}
 	std::string datasetName = "measurement_" + std::to_string(datasetId);
 
-	//create new measurement group
+	//创建新的测量组
 	hid_t measurement = H5Gcreate(data, datasetName.c_str(), H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
 	const int attrSpaceDim = 1;
 	const hsize_t attrSpaceSize[1] = { 1 };
@@ -334,7 +336,7 @@ void SU2MeasurementCorrelation::_writeOutfileCorrelation(const std::string &obse
 	H5Aclose(attr);
 	H5Sclose(attrSpace);
 
-	//write data
+	//写入数据
 	int inRangeCount = 0;
 	for (SublatticeIterator i = FrgCommon::lattice().getRange(0); i != FrgCommon::lattice().end(); ++i) ++inRangeCount;
 	const int dataSpaceDim = 2;

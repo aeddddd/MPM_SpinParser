@@ -40,7 +40,7 @@ namespace LatticeModelFactory
 		 * @brief 比较运算符. 
 		 * 
 		 * @param rhs 右侧操作数. 
-		 * @return bool 如果两个对象描述相同的晶格位点，则返回 true。否则返回 false. 
+		 * @return bool 如果两个对象描述相同的晶格位点,则返回 true.否则返回 false. 
 		 */
 		bool operator==(const LatticeSite& rhs) const;
 
@@ -48,7 +48,7 @@ namespace LatticeModelFactory
 		 * @brief 负比较运算符. 
 		 * 
 		 * @param rhs 右侧操作数. 
-		 * @return bool 如果两个对象描述相同的晶格位点，则返回 false。否则返回 true. 
+		 * @return bool 如果两个对象描述相同的晶格位点,则返回 false.否则返回 true. 
 		 */
 		bool operator!=(const LatticeSite& rhs) const;
 
@@ -79,31 +79,31 @@ namespace LatticeModelFactory
 		 * @brief 确定晶格键是否附着在指定位点. 
 		 * 
 		 * @param site 测试位点. 
-		 * @return bool 如果晶格键的一端连接到指定位置，则返回 true。否则返回 false. 
+		 * @return bool 如果晶格键的一端连接到指定位置,则返回 true.否则返回 false. 
 		 */
 		bool isAttachedToSite(const LatticeSite& site) const;
 
 		/**
-		 * @brief 确定晶格键是否连接两个指定位点，忽略键的方向. 
+		 * @brief 确定晶格键是否连接两个指定位点,忽略键的方向. 
 		 * 
 		 * @param site1 第一个位点. 
 		 * @param site2 第二格位点. 
-		 * @return bool 如果键连接两个位点则返回 true，否则返回 false. 
+		 * @return bool 如果键连接两个位点则返回 true,否则返回 false. 
 		 */
 		bool isConnectingSites(const LatticeSite& site1, const LatticeSite& site2) const;
 
 		/**
-		 * @brief 确定晶格键是否连接两个指定位置，同时检查键的方向. 
+		 * @brief 确定晶格键是否连接两个指定位置,同时检查键的方向. 
 		 * 
 		 * @param siteFrom 晶格键应发出的位点. 
 		 * @param siteTo 晶格键应连接到的位点. 
-		 * @return bool 如果键连接两个位点则返回 true，否则返回 false. 
+		 * @return bool 如果键连接两个位点则返回 true,否则返回 false. 
 		 */
 		bool isConnectingFromTo(const LatticeSite& siteFrom, const LatticeSite& siteTo) const;
 
 		/**
-		 * @brief 给定一个晶格位点，确定该键连接到的另一个位点. 
-		 * 如果该位点多次连接到指定的晶格位点（即在具有单原子基础的晶格中），则返回所有其他连接位点. 
+		 * @brief 给定一个晶格位点,确定该键连接到的另一个位点. 
+		 * 如果该位点多次连接到指定的晶格位点（即在具有单原子基础的晶格中）,则返回所有其他连接位点. 
 		 * 
 		 * @param site 第一个位点. 
 		 * @return std::vector<LatticeSite> 晶格键连接到的其他位点. 

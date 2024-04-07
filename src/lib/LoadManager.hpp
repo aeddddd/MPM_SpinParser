@@ -426,7 +426,7 @@ namespace HMP
 		virtual void calculate(const StackIdentifier *stackIds, const int size) = 0;
 
 		/**
-		 * @brief 计算堆栈列表，其中堆栈标识符以初始值设定项列表形式提供. 
+		 * @brief 计算堆栈列表,其中堆栈标识符以初始值设定项列表形式提供. 
 		 * 
 		 * @param stackIds 堆栈标识符的初始化列表.
 		 */

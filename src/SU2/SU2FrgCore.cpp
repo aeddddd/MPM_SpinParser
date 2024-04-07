@@ -1,7 +1,7 @@
 /**
  * @file SU2FrgCore.cpp
  * @author Finn Lasse Buessen
- * @brief FrgCore implementation for SU(2) models.
+ * @brief SU(2) 模型的 FRG 核心实现.
  * 
  * @copyright Copyright (c) 2020
  */
@@ -16,7 +16,7 @@
 
 SU2FrgCore::SU2FrgCore(const SpinModel &spinModel, const std::vector<Measurement *> &measurements, const std::map<std::string, std::string> &options) : FrgCore(measurements)
 {
-	//init options
+	//初始化选项
 	spinLength = 0.5;
 	normalization = NAN;
 
@@ -88,13 +88,13 @@ SU2FrgCore::~SU2FrgCore()
 
 void SU2FrgCore::computeStep()
 {
-	//update cutoff and broadcast
+	//更新截止和广播
 	SpinParser::spinParser()->getLoadManager()->calculate(dataStacks[4]);
 	SpinParser::spinParser()->getLoadManager()->broadcast(dataStacks[4]);
-	//calculate 1-particle vertices and broadcast (required for Katanin calculation)
+	//计算 1 粒子顶点并广播（Katanin 计算所需）
 	SpinParser::spinParser()->getLoadManager()->calculate(dataStacks[5]);
 	SpinParser::spinParser()->getLoadManager()->broadcast(dataStacks[5]);
-	//calculate 2-particle vertices and managed measurements
+	//计算 2 粒子顶点和管理测量
 	std::vector<int> managedMeasurementStacks;
 	for (auto m = _measurements.begin(); m != _measurements.end(); ++m)
 	{
@@ -110,19 +110,19 @@ void SU2FrgCore::computeStep()
 
 void SU2FrgCore::finalizeStep(float newCutoff)
 {
-	//determine cutoff set
+	//确定截止集
 	float cutoffStep = newCutoff - _flowingFunctional->cutoff;
 
-	//set new cutoff value
+	//设置新的截止值
 	_flowingFunctional->cutoff = newCutoff;
 
-	//add _flow to single particle vertex
+	//将_flow添加到单粒子顶点
 	#ifndef DISABLE_OMP
 	#pragma omp parallel for schedule(static)
 	#endif
 	for (int i = 0; i < static_cast<SU2EffectiveAction *>(_flowingFunctional)->vertexSingleParticle->size; ++i) static_cast<SU2EffectiveAction *>(_flowingFunctional)->vertexSingleParticle->_data[i] += cutoffStep * static_cast<SU2EffectiveAction *>(_flow)->vertexSingleParticle->_data[i];
 
-	//add _flow to two particle vertex
+	//将_flow添加到两个粒子顶点
 	#ifndef DISABLE_OMP
 	#pragma omp parallel for schedule(static)
 	#endif
@@ -132,7 +132,7 @@ void SU2FrgCore::finalizeStep(float newCutoff)
 	#endif
 	for (int i = 0; i < static_cast<SU2EffectiveAction *>(_flowingFunctional)->vertexTwoParticle->size; ++i) static_cast<SU2EffectiveAction *>(_flowingFunctional)->vertexTwoParticle->_dataSS[i] += cutoffStep * static_cast<SU2EffectiveAction *>(_flow)->vertexTwoParticle->_dataSS[i];
 
-	//broadcast updated effective action
+	//广播更新有效行动
 	SpinParser::spinParser()->getLoadManager()->broadcast({ dataStacks[0], dataStacks[1], dataStacks[2], dataStacks[3] });
 }
 
@@ -153,7 +153,7 @@ void SU2FrgCore::_calculateVertexSingleParticle(const int iterator)
 		sum += v4->getValue(FrgCommon::lattice().zero(), j, w + cutoff, 0.0f, w - cutoff, SU2VertexTwoParticle::Symmetry::Density, SU2VertexTwoParticle::FrequencyChannel::None);
 		sum -= v4->getValue(FrgCommon::lattice().zero(), j, w - cutoff, 0.0f, w + cutoff, SU2VertexTwoParticle::Symmetry::Density, SU2VertexTwoParticle::FrequencyChannel::None);
 	}
-	//additional prefactor 2.0 * spinLength from generalization to arbitrary spin
+	//附加前置因子 2.0 * 自旋从泛化到任意自旋的长度
 	v2CurrentValue -= 4.0f * spinLength * sum;
 
 	//term2
@@ -177,7 +177,7 @@ void SU2FrgCore::_calculateVertexTwoParticle(const int iterator)
 	float s, t, u;
 	v4->expandIterator(iterator, s, t, u);
 
-	//vertex buffers
+	//顶点缓冲区
 	ValueSuperbundle<float, 2> buffer1(FrgCommon::lattice().size);
 	ValueSuperbundle<float, 2> buffer2(FrgCommon::lattice().size);
 	ValueSuperbundle<float, 2> bufferRPA(FrgCommon::lattice().size);
@@ -189,13 +189,13 @@ void SU2FrgCore::_calculateVertexTwoParticle(const int iterator)
 		ValueSuperbundle<float, 2>(FrgCommon::lattice().size)
 	};
 
-	//transfer frequencies
+	//传输频率
 	float w1p = 0.5f * (s + t + u);
 	float w1 = 0.5f * (s - t + u);
 	float w2p = 0.5f * (s - t - u);
 	float w2 = 0.5f * (s + t - u);
 
-	//integrand of the ferquency integral
+	//频率积分的被积函数
 	auto integralKernelS = [&](const float wp, ValueSuperbundle<float, 2> &returnBuffer) -> void
 	{
 		//pp-ladder A and B (positive sign)
@@ -210,7 +210,7 @@ void SU2FrgCore::_calculateVertexTwoParticle(const int iterator)
 		v4->getValueSuperbundle(ab2, stackBuffers[2]);
 		v4->getValueSuperbundle(ab3, stackBuffers[3]);
 
-		//calculate _flow
+		//计算 _flow
 		returnBuffer.reset();
 
 		returnBuffer.bundle(static_cast<int>(SU2VertexTwoParticle::Symmetry::Spin)).multSub(0.5f, stackBuffers[0].bundle(static_cast<int>(SU2VertexTwoParticle::Symmetry::Spin)), stackBuffers[1].bundle(static_cast<int>(SU2VertexTwoParticle::Symmetry::Spin)));

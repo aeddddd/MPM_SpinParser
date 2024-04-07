@@ -28,8 +28,8 @@ struct ComputationStatus
 	enum struct Identifier : int
 	{
 		New = 0, ///< 当前任务是新的计算. 
-		Running = 1, ///< 任务的计算正在进行中，并且已经编写了一个检查点. 
-		Postprocessing = 2, ///< 任务已完成，但仍有待执行测量. 
+		Running = 1, ///< 任务的计算正在进行中,并且已经编写了一个检查点. 
+		Postprocessing = 2, ///< 任务已完成,但仍有待执行测量. 
 		Finished = 3 ///< 任务已完成. 
 	};
 	
@@ -50,9 +50,9 @@ struct Fileset
 /**
  * @brief pf-FRG流动方程求解的主要对象和接口. 
  * @details SpinParser 对象为求解 pf-FRG 流动方程提供了中心接口. 
- * 它被设计为一个单例，通过 SpinParser::spinParser() 函数自动创建和检索. 
+ * 它被设计为一个单例,通过 SpinParser::spinParser() 函数自动创建和检索. 
  * 然后通过 SpinParser::run() 函数启动流方程的解,该函数随启动参数 argc 和 argv 一起提供.
- * 一旦 run() 函数被触发，SpinParser 将读取任务文件，准备指定的晶格自旋模型，并启动用于求解相应流方程的数值核心.
+ * 一旦 run() 函数被触发,SpinParser 将读取任务文件,准备指定的晶格自旋模型,并启动用于求解相应流方程的数值核心.
  */
 class SpinParser
 {
@@ -67,16 +67,16 @@ public:
 	/**
 	 * @brief 启动 SpinParser. 
 	 * 
-	 * @param argc 启动参数 argc，由操作系统提供. 
-	 * @param argv 启动参数 argv，由操作系统提供. 
-	 * @return int 成功时返回 0，如果发生错误则返回 1. 
+	 * @param argc 启动参数 argc,由操作系统提供. 
+	 * @param argv 启动参数 argv,由操作系统提供. 
+	 * @return int 成功时返回 0,如果发生错误则返回 1. 
 	 */
 	int run(int argc, char **argv);
 
 	/**
 	 * @brief 查询当前实例是否为MPI主级别.
 	 *
-	 * @return bool 如果当前实例是 MPI 主级别，则返回 true。否则，返回 false. 
+	 * @return bool 如果当前实例是 MPI 主级别,则返回 true.否则,返回 false. 
 	 */
 	bool isMasterRank() const;
 
@@ -142,7 +142,7 @@ protected:
 	void writeCheckpoint();
 
 	static SpinParser *_spinParserInstance; ///< SpinParser 的单例实例. 
-	bool _isMasterRank; ///< 如果当前实例是 MPI 主级别，则为 true，否则为 false. 
+	bool _isMasterRank; ///< 如果当前实例是 MPI 主级别,则为 true,否则为 false. 
 	ComputationStatus _computationStatus; ///< 计算状态. 
 	Fileset _fileset; ///< 输出文件名. 
 

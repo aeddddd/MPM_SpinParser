@@ -31,7 +31,7 @@ class FrgCore
 	friend class SpinParser;
 public:
 	/**
-	 * @brief 调用所有关联的测量协议。 
+	 * @brief 调用所有关联的测量协议. 
 	 */
 	void takeMeasurements() const
 	{
@@ -57,7 +57,7 @@ public:
 				}
 			}
 
-			//如果指定了延迟测量，则写入顶点输出
+			//如果指定了延迟测量,则写入顶点输出
 			bool postprocessingRequired = false;
 			if (SpinParser::spinParser()->getCommandLineOptions()->deferMeasurements()) postprocessingRequired = true;
 			for (auto m : _measurements) if (m->isDeferred()) postprocessingRequired = true;
@@ -69,7 +69,7 @@ public:
 
 	/**
 	 * @brief 流动方程求解中单个 RG 步骤的虚拟实现. 
-	 * @details 该方法的具体实现预计将计算 FrgCore::flowing Function 中当前配置的流量方程，并将结果填充到 FrgCore::flow 中. 
+	 * @details 该方法的具体实现预计将计算 FrgCore::flowing Function 中当前配置的流量方程,并将结果填充到 FrgCore::flow 中. 
 	 * 预计不会进行任何进一步的修改. 
 	 * 
 	 * @see FrgCore::finalizeStep()
@@ -117,7 +117,7 @@ public:
 
 protected:
 	/**
-	 * @brief 构造一个新的FrgCore，它拥有指定测量的所有权.
+	 * @brief 构造一个新的FrgCore,它拥有指定测量的所有权.
 	 * @see Measurement
 	 *
 	 * @param measurements 求解流动方程期间调用的测量协议列表.

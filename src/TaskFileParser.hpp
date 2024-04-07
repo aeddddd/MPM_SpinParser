@@ -26,16 +26,16 @@ public:
 	/**
 	 * @brief 构造一个新的TaskFileParser对象并解析指定的任务文件,对输入xml文件进行处理
 	 * @details 在解析过程中,TaskFileParser将分配和初始化（使用任务文件中指定的参数）FrequencyDiscretization、CutoffDiscretization和Lattice对象；
-	 * 将这些对象的指针分别存储在frequency、cutoff和lattice中。
-	 * 此外,它还分配了任务文件中指定的FrgCore（包括FrgCore::measurements）,并将其写入frgCore。
-	 * 还返回与任务文件相关联的计算状态。
+	 * 将这些对象的指针分别存储在frequency、cutoff和lattice中.
+	 * 此外,它还分配了任务文件中指定的FrgCore（包括FrgCore::measurements）,并将其写入frgCore.
+	 * 还返回与任务文件相关联的计算状态.
 	 * 
 	 * @param[in] taskFilePath 要解析的任务文件的路径,使用 const 固定.
 	 * @param[out] frequency 新生成的FrequencyDiscretization(频率离散化)
 	 * @param[out] cutoff 新生成的CutoffDiscretization(截断离散化)
 	 * @param[out] lattice 新生成的Lattice(晶格)
 	 * @param[out] frgCore 新生成的FRG核心
-	 * @param[out] computationStatus 与任务文件相关联的计算状态。
+	 * @param[out] computationStatus 与任务文件相关联的计算状态.
 	 */
 	TaskFileParser(const std::string &taskFilePath, FrequencyDiscretization *&frequency, CutoffDiscretization *&cutoff, Lattice *&lattice, FrgCore *&frgCore, ComputationStatus &computationStatus);
 
@@ -61,7 +61,7 @@ protected:
 	void _validateProperties(const boost::property_tree::ptree &tree, const std::string &node, const std::set<std::string> &requiredChildren, const std::set<std::string> &requiredAttributes, const std::set<std::string> &optionalChildren = {}, const std::set<std::string> &optionalAttributes = {}) const;
 
 	/**
-	 * @brief 确保给定的属性树包含特定节点,并测试该节点是否包含所需子项的列表.如果不满足要求,则引发 Exception::Type::InitializationError。
+	 * @brief 确保给定的属性树包含特定节点,并测试该节点是否包含所需子项的列表.如果不满足要求,则引发 Exception::Type::InitializationError.
 	 * 
 	 * @param tree 要测试的属性树. 
 	 * @param node 要测试的节点. 
@@ -71,7 +71,7 @@ protected:
 	void _validateRequiredChildren(const boost::property_tree::ptree &tree, const std::string &node, const std::set<std::string> &requiredChildren, const std::string &treePath = "") const;
 	
 	/**
-	 * @brief 确保给定的属性树包含特定节点，并测试该节点是否包含必需属性的列表。如果不满足要求，则引发 Exception::Type::InitializationError.
+	 * @brief 确保给定的属性树包含特定节点,并测试该节点是否包含必需属性的列表.如果不满足要求,则引发 Exception::Type::InitializationError.
 	 * 
 	 * @param tree 要测试的属性树. 
 	 * @param node 要测试的节点. 
@@ -81,7 +81,7 @@ protected:
 	void _validateRequiredAttributes(const boost::property_tree::ptree &tree, const std::string &node, const std::set<std::string> &requiredAttributes, const std::string &treePath = "") const;
 	
 	/**
-	 * @brief 确保给定的属性树包含特定节点，并测试该节点是否仅包含可选值列表中的子项。如果不满足要求，则引发 Exception::Type::InitializationError.
+	 * @brief 确保给定的属性树包含特定节点,并测试该节点是否仅包含可选值列表中的子项.如果不满足要求,则引发 Exception::Type::InitializationError.
 	 * 
 	 * @param tree 要测试的属性树. 
 	 * @param node 要测试的节点. 
@@ -91,7 +91,7 @@ protected:
 	void _validateOptionalChildren(const boost::property_tree::ptree &tree, const std::string &node, const std::set<std::string> &optionalChildren, const std::string &treePath = "") const;
 	
 	/**
-	 * @brief 确保给定的属性树包含特定节点，并测试该节点是否仅包含可选值列表中的属性。如果不满足要求，则引发 Exception::Type::InitializationError.
+	 * @brief 确保给定的属性树包含特定节点,并测试该节点是否仅包含可选值列表中的属性.如果不满足要求,则引发 Exception::Type::InitializationError.
 	 * 
 	 * @param tree 要测试的属性树. 
 	 * @param node 要测试的节点. 

@@ -15,7 +15,7 @@
 namespace Log
 {
 	/**
-	 * @brief 指定输出过滤的日志级别。任何日志级别还包括较低输出级别的输出.
+	 * @brief 指定输出过滤的日志级别.任何日志级别还包括较低输出级别的输出.
 	 */
 	enum struct LogLevel
 	{
@@ -42,7 +42,7 @@ namespace Log
 	 * @brief 用于简单输出过滤的日志流对象.
 	 * @details Logstream 对象根据选定的日志级别提供输出过滤.
 	 * 过滤后的输出写入 stdout.
-	 * 生成的任何输出都带有时间戳，测量自创建 Logstream 对象以来的时间.
+	 * 生成的任何输出都带有时间戳,测量自创建 Logstream 对象以来的时间.
 	 */
 	class Logstream
 	{
@@ -51,7 +51,7 @@ namespace Log
 		friend StructManipulator setLogLevel(const Log::LogLevel logLevel);
 	public:
 		/**
-		 * @brief 构造一个新的 Logstream 对象，日志过滤为 Log::Log Level::Info.
+		 * @brief 构造一个新的 Logstream 对象,日志过滤为 Log::Log Level::Info.
 		 */
 		Logstream(std::ostream &logTarget) : _logTarget(logTarget), _constructionTime(boost::posix_time::microsec_clock::local_time())
 		{
@@ -61,7 +61,7 @@ namespace Log
 		};
 
 		/**
-		 * @brief 任意类型消息的输出运算符。将接受任何实现 stdout 的输出运算符的日志对象.
+		 * @brief 任意类型消息的输出运算符.将接受任何实现 stdout 的输出运算符的日志对象.
 		 *
 		 * @tparam 日志消息的类型.
 		 * @param ls 目标 Logstream 对象.
@@ -127,7 +127,7 @@ namespace Log
 		std::ostream &_logTarget; ///< 输出流. 
 		boost::posix_time::ptime _constructionTime; ///< Logstream对象的创建时间. 
 
-		bool _carriageReturn; ///< 如果设置为 true，则打印下一条日志消息并带有时间戳. 
+		bool _carriageReturn; ///< 如果设置为 true,则打印下一条日志消息并带有时间戳. 
 		Log::LogLevel _displayLogLevel; ///< 选定的输出过滤. @see Log::LogLevel
 		Log::LogLevel _streamLogLevel; ///< 新日志消息的当前日志级别. 
 	};
