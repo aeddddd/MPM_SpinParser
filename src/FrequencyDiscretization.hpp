@@ -74,7 +74,7 @@ struct FrequencyIterator
 	}
 
 	/**
-	 * @brief Prefix decrement operator. 
+	 * @brief 前缀自减运算符. 
 	 * 
 	 * @return FrequencyIterator& Reference to self. 
 	 */
@@ -85,10 +85,10 @@ struct FrequencyIterator
 	}
 	
 	/**
-	 * @brief Iterator addition operator. 
+	 * @brief 迭代器加法运算符. 
 	 * 
-	 * @param rhs Number of steps to increment iterator. 
-	 * @return FrequencyIterator Iterator incremented by the specified number of steps. 
+	 * @param rhs 迭代器递增的步数. 
+	 * @return FrequencyIterator 迭代器按指定步数递增. 
 	 */
 	FrequencyIterator operator+(const int rhs) const
 	{
@@ -96,10 +96,10 @@ struct FrequencyIterator
 	}
 
 	/**
-	 * @brief Iterator subtraction operator. 
+	 * @brief 迭代减法运算符. 
 	 * 
-	 * @param rhs Number of steps to decrement iterator. 
-	 * @return FrequencyIterator Iterator decremented by the specified number of steps. 
+	 * @param rhs 递减迭代器的步数. 
+	 * @return FrequencyIterator 迭代器递减指定的步数. 
 	 */
 	FrequencyIterator operator-(const int rhs) const
 	{
@@ -107,10 +107,10 @@ struct FrequencyIterator
 	}
 
 	/**
-	 * @brief Greater comparison operator. 
+	 * @brief 更大的比较运算符. 
 	 * 
-	 * @param rhs Right hand side operand. 
-	 * @return bool Return true if the iterator is greater than the specified value, otherwise return false. 
+	 * @param rhs 右侧操作数. 
+	 * @return bool 如果迭代器大于指定值则返回 true，否则返回 false。 
 	 */
 	bool operator>(const FrequencyIterator &rhs) const
 	{
@@ -118,10 +118,10 @@ struct FrequencyIterator
 	}
 	
 	/**
-	 * @brief Greater or equal comparison operator. 
+	 * @brief 大于或等于比较运算符. 
 	 * 
-	 * @param rhs Right hand side operand. 
-	 * @return bool Return true if the iterator is greater or equal than the specified value, otherwise return false. 
+	 * @param rhs 右侧操作数. 
+	 * @return bool 如果迭代器大于或等于指定值则返回 true，否则返回 false. 
 	 */
 	bool operator>=(const FrequencyIterator &rhs) const
 	{
@@ -129,10 +129,10 @@ struct FrequencyIterator
 	}
 	
 	/**
-	 * @brief Lesser comparison operator. 
+	 * @brief 较小的比较运算符. 
 	 * 
-	 * @param rhs Right hand side operand. 
-	 * @return bool Return true if the iterator is lesser than the specified value, otherwise return false. 
+	 * @param rhs 右侧操作数. 
+	 * @return bool 如果迭代器小于指定值则返回 true，否则返回 false. 
 	 */
 
 	bool operator<(const FrequencyIterator &rhs) const
@@ -141,10 +141,10 @@ struct FrequencyIterator
 	}
 	
 	/**
-	 * @brief Lesser or equal comparison operator. 
+	 * @brief 小于或等于比较运算符. 
 	 * 
-	 * @param rhs Right hand side operand. 
-	 * @return bool Return true if the iterator is lesser or equal than the specified value. 
+	 * @param rhs 右侧操作数. 
+	 * @return bool 如果迭代器小于或等于指定值，则返回 true. 
 	 */
 	bool operator<=(const FrequencyIterator &rhs) const
 	{
@@ -156,30 +156,30 @@ struct FrequencyIterator
 #pragma endregion
 
 /**
- * @brief Discretization of Matsubara frequency space. 
- * @details This structure represents a discretization of Matsubara frequency space base on a list of specified mesh points. 
- * It provides methods to iterate the frequency mesh, to find closest mesh points, and to linearly interpolate arbitrary values inbetween the mesh points. 
- * The mesh is mirror symmetric around the origin.  
+ * @brief 松原频率空间的离散化. 
+ * @details 该结构表示基于指定网格点列表的松原频率空间的离散化. 
+ * 它提供了迭代频率网格、查找最近网格点以及线性插值任意值的方法在网格点之间. 
+ * 网格绕原点镜像对称.  
  */
 struct FrequencyDiscretization
 {
 public:
 	/**
-	 * @brief Construct a frequency discretization based on a list of specified mesh points. 
-	 * The list of specified mesh points must be in ascending order and positive definite. 
-	 * The symmetry-related negative values are automatically generated. 
+	 * @brief 根据指定网格点列表构建频率离散化. 
+	 * 指定网格点的列表必须按升序且正定. 
+	 * 自动生成与对称性相关的负值. 
 	 * 
-	 * @param values List of mesh points. 
+	 * @param values 网格点列表. 
 	 */
 	FrequencyDiscretization(const std::vector<float> &values)
 	{
-		//Ensure that the frequency values are in ascending order
+		//确保频率值按升序排列
 		ASSERT(std::is_sorted(values.begin(), values.end()));
 
-		//Ensure that discretization contains sufficiently many frequencies
+		//确保离散化包含足够多的频率
 		if (values.size() < 2) throw Exception(Exception::Type::ArgumentError, "FrequencyDiscretization must contain at least two frequency values");
 		
-		//Allocate memory and store frequencies
+		//分配内存并存储频率
 		size = int(values.size());
 		_dataNegative = new float[2 * size];
 		_data = _dataNegative + size;
@@ -196,7 +196,7 @@ public:
 	}
 
 	/**
-	 * @brief Destroy the FrequencyDiscretization object. 
+	 * @brief 销毁频率离散化对象. 
 	 */
 	~FrequencyDiscretization()
 	{
@@ -204,9 +204,9 @@ public:
 	}
 
 	/**
-	 * @brief Retrieve iterator to the first positive mesh point; This is the positive value with the smallest absolute value. 
+	 * @brief 检索迭代器到第一个正网格点；这是绝对值最小的正值. 
 	 * 
-	 * @return FrequencyIterator Iterator to the first positive mesh point. 
+	 * @return FrequencyIterator 到第一个正网格点的迭代器. 
 	 */
 	FrequencyIterator begin() const
 	{
@@ -214,9 +214,9 @@ public:
 	}
 
 	/**
-	 * @brief Retrieve iterator to the first negative mesh point; This is the negative value with the largest absolute value. 
+	 * @brief 检索迭代器到第一个负网格点；这是绝对值最大的负值. 
 	 * 
-	 * @return FrequencyIterator Iterator to the first negative mesh point.
+	 * @return FrequencyIterator 到第一个负网格点的迭代器.
 	 */
 	FrequencyIterator beginNegative() const
 	{
@@ -224,9 +224,9 @@ public:
 	}
 
 	/**
-	 * @brief Retrieve iterator to the last mesh point; This is the positive value with the largest absolute value. 
+	 * @brief 检索迭代器到最后一个网格点；这是绝对值最大的正值. 
 	 * 
-	 * @return FrequencyIterator Iterator to the last mesh point. 
+	 * @return FrequencyIterator 到最后一个网格点的迭代器. 
 	 */
 	FrequencyIterator last() const
 	{
@@ -234,9 +234,9 @@ public:
 	}
 
 	/**
-	 * @brief Retrieve iterator to the last+1 mesh point. 
+	 * @brief 检索迭代器到最后+1个网格点. 
 	 * 
-	 * @return FrequencyIterator Iterator to the last+1 mesh point. 
+	 * @return FrequencyIterator 迭代到最后+1个网格点. 
 	 */
 	FrequencyIterator end() const
 	{
@@ -244,11 +244,11 @@ public:
 	}
 
 	/**
-	 * @brief Retrieve an iterator to the closest mesh point that is lesser than the specified frequency value. 
-	 * If no lesser mesh point exists, returns an iterator to the closest mesh point.  
+	 * @brief 检索小于指定频率值的最近网格点的迭代器. 
+	 * 如果不存在更小的网格点，则返回一个迭代器到最近的网格点.  
 	 * 
-	 * @param w Designated upper frequency bound. 
-	 * @return FrequencyIterator Iterator to the closest mesh point. 
+	 * @param w 指定频率上限. 
+	 * @return FrequencyIterator 到最近网格点的迭代器. 
 	 */
 	FrequencyIterator lesser(const float w) const
 	{
@@ -270,11 +270,11 @@ public:
 	}
 
 	/**
-	 * @brief Retrieve an iterator to the closest mesh point that is greater than the specified frequency value. 
-	 * If no greater mesh point exists, returns an iterator to the closest mesh point.  
+	 * @brief 检索大于指定频率值的最近网格点的迭代器. 
+	 * 如果不存在更大的网格点，则返回一个迭代器到最近的网格点.  
 	 * 
-	 * @param w Designated upper frequency bound. 
-	 * @return FrequencyIterator Iterator to the closest mesh point. 
+	 * @param w 指定频率上限. 
+	 * @return FrequencyIterator 到最近网格点的迭代器. 
 	 */
 	FrequencyIterator greater(const float w) const
 	{
@@ -296,12 +296,12 @@ public:
 	}
 
 	/**
-	 * @brief Return the number of iterator increments of a mesh point associated with a given frequency value, relative to the first positive mesh point. 
-	 * The value of the specified frequency must be positive. 
-	 * If no mesh point with that value exists, returns the index of the last mesh point. 
+	 * @brief 返回与给定频率值相关的网格点相对于第一个正网格点的迭代器增量数. 
+	 * 指定频率的值必须为正数. 
+	 * 如果不存在具有该值的网格点，则返回最后一个网格点的索引. 
 	 * 
-	 * @param w Frequency value. Must be positive. 
-	 * @return int Index of the mesh point. 
+	 * @param w 频率值。必须是正的. 
+	 * @return int 网格点索引. 
 	 */
 	int offset(const float w) const
 	{
@@ -316,12 +316,12 @@ public:
 	}	
 
 	/**
-	 * @brief Perform an interpolation between mesh points for an arbitrary positive frequency. 
+	 * @brief 在网格点之间执行任意正频率的插值. 
 	 * 
-	 * @param[in] w Frequency value to interpolate to. Must be positive. 
-	 * @param[out] lowerOffset Number of iterator increments of the lesser mesh point, relative to the first positive mesh point. 
-	 * @param[out] upperOffset Number of iterator increments of the greater mesh point, relative to the first positive mesh point. 
-	 * @param[out] bias Linear interpolation weight. Zero, if `w` matches the mesh point at `lowerOffset`. One. if `w` matches the mesh point at `upperOffset`. 
+	 * @param[in] w 要插值的频率值。必须是正的. 
+	 * @param[out] lowerOffset 较小网格点相对于第一个正网格点的迭代器增量数. 
+	 * @param[out] upperOffset 相对于第一个正网格点的较大网格点的迭代器增量数. 
+	 * @param[out] bias 线性插值权重.如果“w”与“lower Offset”处的网格点匹配:0. 如果“w”与“upper Offset”处的网格点匹配:1. 
 	 */
 	void interpolateOffset(const float w, int &lowerOffset, int &upperOffset, float &bias) const
 	{
@@ -355,7 +355,7 @@ public:
 		ASSERT(bias >= 0.0f && bias <= 1.0f);
 	}
 
-	int size; ///< Number of positive mesh points. 
-	float *_data; ///< Pointer to the first positive mesh point. Stored contiuously after FrequencyDiscretization::_dataNegative. 
-	float *_dataNegative; ///< Pointer to the first negative mesh point. 
+	int size; ///< 正网格点数. 
+	float *_data; ///< 指向第一个正网格点的指针。之后连续保存 FrequencyDiscretization::_dataNegative. 
+	float *_dataNegative; ///< 指向第一个负网格点的指针. 
 };

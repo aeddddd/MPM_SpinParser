@@ -21,7 +21,7 @@
 #define __RESOLVE_ASSERT_OVERLOAD(_1, _2, FUNCTIONNAME, ...) FUNCTIONNAME
 
 /**
- * @brief Ensure that the first argument is true. Optionally provide a message as the second argument, which is printed with an error message if the assertion fails. 
+ * @brief 确保第一个参数为真。可以选择提供一条消息作为第二个参数，如果断言失败，则打印一条错误消息. 
  */
 #define ASSERT(...) __RESOLVE_ASSERT_OVERLOAD(__VA_ARGS__, __ASSERT_OVERLOAD2, __ASSERT_OVERLOAD1)(__VA_ARGS__)
 

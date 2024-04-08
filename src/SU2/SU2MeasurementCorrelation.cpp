@@ -98,7 +98,7 @@ void SU2MeasurementCorrelation::_calculateCorrelation(const int iterator) const
 		//term1
 		//备注：由于自能参数化中出现了两个 i，因此该项带有正号
 		float term1 = 1.0f / ((w + v2->getValue(w)) * (w + nu + v2->getValue(w + nu)));
-		//additional prefactor 2.0 * spinLength from generalization to arbitrary spin
+		//附加前置因子 2.0 * 自旋长度泛化到任意自旋
 		returnBuffer.bundle(static_cast<int>(SU2VertexTwoParticle::Symmetry::Spin))[0] += core->spinLength * term1 / float(2.0f * M_PI);
 		returnBuffer.bundle(static_cast<int>(SU2VertexTwoParticle::Symmetry::Density))[0] += 2.0f * core->spinLength * term1 / float(M_PI);
 
@@ -113,12 +113,12 @@ void SU2MeasurementCorrelation::_calculateCorrelation(const int iterator) const
 			const float vd = v4->getValue(FrgCommon::lattice().zero(), FrgCommon::lattice().zero(), w + wp + nu, w - wp, nu, SU2VertexTwoParticle::Symmetry::Density, SU2VertexTwoParticle::FrequencyChannel::None);
 
 			//dumbbell diagram
-			//additional prefactor 4.0 * spinLength^2 from generalization to arbitrary spin
+			//附加前置因子 4.0 * spin Length^2 从泛化到任意自旋
 			ret.bundle(static_cast<int>(SU2VertexTwoParticle::Symmetry::Spin)).multSub(core->spinLength * core->spinLength, stackBuffer.bundle(static_cast<int>(SU2VertexTwoParticle::Symmetry::Spin)));
 			ret.bundle(static_cast<int>(SU2VertexTwoParticle::Symmetry::Density)).multSub(16.0f * core->spinLength * core->spinLength, stackBuffer.bundle(static_cast<int>(SU2VertexTwoParticle::Symmetry::Density)));
 
 			//egg diagram
-			//additional prefactor 2.0 * spinLength from generalization to arbitrary spin
+			//附加前置因子 2.0 * 自旋长度泛化到任意自旋
 			ret.bundle(static_cast<int>(SU2VertexTwoParticle::Symmetry::Spin))[0] += core->spinLength * (-vs / 4.0f + vd);
 			ret.bundle(static_cast<int>(SU2VertexTwoParticle::Symmetry::Density))[0] += core->spinLength * (3.0f * vs + 4.0f * vd);
 

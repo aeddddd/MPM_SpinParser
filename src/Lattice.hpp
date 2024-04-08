@@ -23,7 +23,7 @@ namespace LatticeModelFactory {
 };
 
 /**
- * @brief Component of a spin operator. 
+ * @brief 自旋算子的组成部分. 
  */
 enum struct SpinComponent : int
 {
@@ -34,14 +34,14 @@ enum struct SpinComponent : int
 };
 
 /**
- * @brief Structure to describe the portion of the lattice that is relevant in terms of the form sum_j v(i1,j)*v(j,i2). 
- * @details Structure to describe the portion of the lattice that is relevant in terms of the form sum_j v(i1,j)*v(j,i2), 
- * where v(...) is a two-particle vertex function with its two lattice site arguments. 
- * The overlap covers all lattice sites which are within the truncatino range of both vertices. 
- * The LatticeOverlap structure contains a list of representative ids to which the first vertex v(i1,j) is mapped under lattice symmetry reduction for every j within the overlap region. 
- * Similarly, it contains a list of representative ids to which the second vertex v(j,i2) is mapped. 
- * Furthermore, the spin permutations required for the symmetry transformations are stored. 
- * Each tuple of (rid1[i],rid2[i],transformedX1[i],transformedY1[i],transformedZ1[i],transformedX2[i],transformedY2[i],transformedZ2[i]) describes the transformations for a single term in the sum over overlapping lattice sites j. 
+ * @brief 用于描述与 j v(i1,j)*v(j,i2) 形式相关的晶格部分的结构. 
+ * @details 用于描述与 j v(i1,j)*v(j,i2) 形式相关的晶格部分的结构, 
+ * 其中 v(...) 是一个双粒子顶点函数，具有两个晶格位点参数. 
+ * 重叠覆盖两个顶点截断范围内的所有晶格位点. 
+ * 晶格重叠结构包含一个代表性 id 列表，对于重叠区域内的每个 j，第一个顶点 v(i1,j) 在晶格对称性约简下映射到该列表. 
+ * 类似地，它包含第二个顶点 v(j,i2) 映射到的代表性 id 列表. 
+ * 此外，存储对称变换所需的自旋排列. 
+ * (rid1[i],rid2[i],变换后的X1[i],变换后的Y1[i],变换后的Z1[i],变换后的X2[i],变换后的Y2[i],变换后的Z2[i])的每个元组描述重叠格点 j 上的总和中的单个项的变换. 
  */
 struct LatticeOverlap
 {
@@ -52,9 +52,9 @@ public:
 	LatticeOverlap() : rid1(nullptr), rid2(nullptr), transformedX1(nullptr), transformedY1(nullptr), transformedZ1(nullptr), transformedX2(nullptr), transformedY2(nullptr), transformedZ2(nullptr), size(0) {}
 
 	/**
-	 * @brief Construct a new LatticeOverlap object for a given number of sites. 
+	 * @brief 为给定数量的站点构造一个新的 Lattice Overlap 对象. 
 	 * 
-	 * @param size Number of sites in the overlapping region. 
+	 * @param size 重叠区域的站点数量. 
 	 */
 	LatticeOverlap(const int size) : size(size)
 	{
@@ -69,9 +69,9 @@ public:
 	}
 
 	/**
-	 * @brief Construct a new LatticeOverlap object from an existing one.
+	 * @brief 从现有的 Lattice Overlap 对象构造一个新的 Lattice Overlap 对象.
 	 *
-	 * @param rhs LatticeOverlap object.
+	 * @param rhs 晶格重叠对象.
 	 */
 	LatticeOverlap(const LatticeOverlap &rhs) : LatticeOverlap(rhs.size)
 	{
@@ -150,14 +150,14 @@ protected:
 };
 
 /**
- * @brief Structure to specify a symmetry-transformed lattice site. 
- * @details The symmetry transformation combines a mapping to a different lattice site and a permutation of spin components.
- * The spin permuation is stored in LatticeSiteDescriptor::spinPermutation, where transformedComponent=spinPermutation[originalComponent].
+ * @brief 指定对称变换晶格位点的结构. 
+ * @details 对称变换结合了到不同晶格位置的映射和自旋分量的排列.
+ * 自旋排列存储在 Lattice Site Descriptor::spin Permutation 中，其中变换后的 Component=spin Permutation[original Component]。
  */
 struct LatticeSiteDescriptor
 {
-	int rid; ///< Representative id of the transformed lattice site. 
-	SpinComponent spinPermutation[3]; ///< Spin permutation involved in the transformation. 
+	int rid; ///< 变换后的格点的代表id. 
+	SpinComponent spinPermutation[3]; ///< 变换中涉及的自旋排列. 
 };
 
 /**
@@ -169,22 +169,22 @@ friend struct Lattice;
 
 public:
 	/**
-	 * @brief Construct a new LatticeIterator object, which points to the representative id 0 per default. 
+	 * @brief 构造一个新的 Lattice Iterator 对象，默认指向代表 id 0. 
 	 */
 	LatticeIterator() : id(0) {}
 
 	/**
-	 * @brief Construct a new LatticeIterator object and initialize it to any representative id. 
+	 * @brief 构造一个新的 Lattice Iterator 对象并将其初始化为任何有代表性的 id. 
 	 * 
-	 * @param id Representative id to initialize. 
+	 * @param id 要初始化的代表 ID. 
 	 */
 	LatticeIterator(int id) : id(id) {}
 
 	/**
-	 * @brief Comparison operator. 
+	 * @brief 比较运算符. 
 	 * 
-	 * @param rhs Right hand side operand. 
-	 * @return bool Returns true, if both iterators point to the same representative id. Returns false otherwise. 
+	 * @param rhs 右侧操作数. 
+	 * @return bool 如果两个迭代器都指向同一个代表 id，则返回 true。否则返回 false. 
 	 */
 	bool operator==(const LatticeIterator &rhs) const
 	{
@@ -192,10 +192,10 @@ public:
 	}
 
 	/**
-	 * @brief Negative comparison operator. 
+	 * @brief 负比较运算符. 
 	 * 
-	 * @param rhs Right hand side operand. 
-	 * @return bool Returns false, if both iterators point to the same representative id. Returns true otherwise. 
+	 * @param rhs 右侧操作数. 
+	 * @return bool 如果两个迭代器都指向同一个代表 id，则返回 false。否则返回 true. 
 	 */
 	bool operator!=(const LatticeIterator &rhs) const
 	{
@@ -203,10 +203,10 @@ public:
 	}
 
 	/**
-	 * @brief Subtraction operator. 
+	 * @brief 减法运算符. 
 	 * 
-	 * @param rhs Right hand side operand. 
-	 * @return int Difference between iterators. 
+	 * @param rhs 右侧操作数. 
+	 * @return int 迭代器之间的区别. 
 	 */
 	int operator-(const LatticeIterator &rhs) const
 	{
@@ -214,7 +214,7 @@ public:
 	}
 
 	/**
-	 * @brief Prefix increment operator. 
+	 * @brief 前缀增量运算符. 
 	 * 
 	 * @return LatticeIterator& Reference to self. 
 	 */
@@ -225,7 +225,7 @@ public:
 	}
 
 	/**
-	 * @brief Prefix decrement operator. 
+	 * @brief 前缀自减运算符. 
 	 * 
 	 * @return LatticeIterator& Reference to self. 
 	 */
@@ -236,27 +236,27 @@ public:
 	}
 
 protected:
-	int id; ///< Representative id which the iterator points to. 
+	int id; ///< 迭代器指向的代表id. 
 };
 
 /**
- * @brief Sublattice iterator object. 
+ * @brief 子晶格迭代器对象. 
  */
 struct SublatticeIterator : public LatticeIterator
 {
 public:
 	/**
-	 * @brief Construct a new SublatticeIterator object over a list of representative ids. 
-	 * @details The SublatticeIterator does not take ownership of the list. 
-	 * It must be guaranteed that the list remains valid during the entire lifetiem of the iterator object. 
-	 * The list mus be terminated by a lattice->end() entry. 
+	 * @brief 在代表性 id 列表上构造一个新的 Sublattice Iterator 对象. 
+	 * @details 子格迭代器不拥有列表的所有权. 
+	 * 必须保证列表在迭代器对象的整个生命周期内保持有效. 
+	 * 该列表必须由lattice->end()条目终止. 
 	 * 
-	 * @param allowedIds List of representative ids that make up the sublattice. Must be terminated by lattice->end(). 
+	 * @param allowedIds 组成子晶格的代表性 id 列表。必须由lattice->end()终止。 
 	 */
 	SublatticeIterator(int *allowedIds) : LatticeIterator(*allowedIds), offset(0), allowedIds(allowedIds) {}
 
 	/**
-	 * @brief Prefix increment operator. 
+	 * @brief 前缀增量运算符. 
 	 * 
 	 * @return SublatticeIterator& Reference to self. 
 	 */
@@ -267,7 +267,7 @@ public:
 	}
 
 	/**
-	 * @brief Prefix decrement operator. 
+	 * @brief 前缀自减运算符. 
 	 * 
 	 * @return SublatticeIterator& Reference to self. 
 	 */
@@ -278,21 +278,21 @@ public:
 	}
 
 protected:
-	int offset; ///< Offset relative to the first entry of SublatticeIterator::allowedIds. 
-	int *allowedIds; ///< List of representative ids that make up the sublattice. Memory is not owned by the iterator. 
+	int offset; ///< 相对于 Sublattice Iterator::allowed Ids 第一个条目的偏移量. 
+	int *allowedIds; ///< 组成子晶格的代表性 id 列表。内存不属于迭代器. 
 };
 
 /**
- * @brief Representation of a physical lattice, with symmetry information on two-point correlators. 
- * @details The lattice representation exploits symmetries. A given lattice contains a finite number of sites, which depends on the selected lattice range parameter. 
- * The lattice would store all sites within the specified range (distance measured in units of lattice bonds) around any of the basis sites. 
+ * @brief 物理晶格的表示，具有两点相关器的对称信息. 
+ * @details 晶格表示利用了对称性。给定的晶格包含有限数量的位点，这取决于所选的晶格范围参数. 
+ * 晶格将存储任何基本位点周围指定范围（以晶格键为单位测量的距离）内的所有位点. 
  *
- * Using lattice symmetries, out of any pair of lattice sites (any two-point correlator), one site can always be mapped to a fixed reference si te at the origin. 
- * The second lattice site, under this mapping, would then be mapped to some other site. 
- * Therefore, the two-point correlators after symmetry reduction only depend on a single lattice site. 
- * The minimum set up these sites, which is required to represent any two-point correlator, is enumerated by the so-called representative id, ranging from zero to some finite value which depends on the lattice geometry. 
+ * 使用晶格对称性，在任何一对晶格位点（任何两点相关器）中，一个位点始终可以映射到原点处的固定参考位点. 
+ * 然后，在此映射下的第二个晶格站点将被映射到其他某个站点. 
+ * 因此，对称性约简后的两点相关器仅依赖于单个晶格位点. 
+ * 代表任何两点相关器所需的这些站点的最小设置由所谓的代表性 id 枚举，范围从零到某个有限值，具体取决于晶格几何形状. 
  * 
- * The lattice representation provides methods to quickly iterate over the lattice, iterate over certain sublattice regions, or to map any two-point correlator to the corresponding representative site. 
+ * 晶格表示提供了快速迭代晶格、迭代某些子晶格区域或将任何两点相关器映射到相应代表位点的方法. 
  */
 struct Lattice
 {
@@ -300,14 +300,14 @@ struct Lattice
 
 protected:
 	/**
-	 * @brief Create an uninitialized lattice object. 
-	 * @details Constructor should not be called directly. Use LatticeModelFactory::newLatticeModel() to create a new lattice. 
+	 * @brief 创建未初始化的晶格对象. 
+	 * @details 不应直接调用构造函数。使用 Lattice Model Factory::new Lattice Model() 创建新的晶格. 
 	 */
 	Lattice() : size(0), _dataSize(0), _symmetryTable(nullptr), _bufferSites(nullptr), _bufferInvertedSites(nullptr), _bufferOverlapMatrices(nullptr), _bufferBasis(nullptr), _bufferLatticeRange(nullptr) {};
 
 public:
 	/**
-	 * @brief Destroy the Lattice object. 
+	 * @brief 销毁 Lattice 对象. 
 	 */
 	~Lattice()
 	{
@@ -321,9 +321,9 @@ public:
 	}
 
 	/**
-	 * @brief Retrieve iterator to first lattice site. 
+	 * @brief 检索迭代器到第一个格点. 
 	 * 
-	 * @return LatticeIterator Iterator to first lattice site. 
+	 * @return LatticeIterator 到第一个格点的迭代器. 
 	 */
 	LatticeIterator begin() const
 	{
@@ -331,9 +331,9 @@ public:
 	}
 
 	/**
-	 * @brief Retrieve iterator to the lattice site i1=(0,0,0,0).
+	 * @brief 检索到格点 i1=(0,0,0,0) 的迭代器.
 	 * 
-	 * @return LatticeIterator Iterator to the lattice site i1=(0,0,0,0).
+	 * @return LatticeIterator 到格点的迭代器 i1=(0,0,0,0).
 	 */
 	LatticeIterator zero() const
 	{
@@ -341,9 +341,9 @@ public:
 	}
 
 	/**
-	 * @brief Retrieve iterator to the last+1 lattice site. 
+	 * @brief 检索到最后+1格点的迭代器. 
 	 * 
-	 * @return LatticeIterator Iterator to the last+1 lattice site. 
+	 * @return LatticeIterator 到最后+1格点的迭代器. 
 	 */
 	LatticeIterator end() const
 	{
@@ -351,10 +351,10 @@ public:
 	}
 
 	/**
-	 * @brief Retrieve iterator to the specified representative. 
+	 * @brief 检索指定代表的迭代器. 
 	 * 
-	 * @param rid Representative id of the desired lattice site. 
-	 * @return LatticeIterator Iterator to the specified representative site. 
+	 * @param rid 所需格点的代表 id. 
+	 * @return LatticeIterator 到指定代表站点的迭代器. 
 	 */
 	LatticeIterator fromParametrization(const int rid) const
 	{
@@ -363,10 +363,10 @@ public:
 	}
 
 	/**
-	 * @brief Get the coordinates of a specified lattice site, in units of a1, a2, a3, and b. 
+	 * @brief 获取指定格点的坐标，单位为a1、a2、a3、b. 
 	 * 
-	 * @param site Input lattice site. 
-	 * @return std::tuple<int, int, int, int> Tuple (n1,n2,n3,nb) which describes the lattice site at coordinate n1*a1+n2*a2+n3*a3+b[nb]. 
+	 * @param site 输入格点. 
+	 * @return std::tuple<int, int, int, int> 元组 (n1,n2,n3,nb) 描述坐标 n1*a1+n2*a2+n3*a3+b[nb] 处的晶格位置. 
 	 */
 	std::tuple<int, int, int, int> getSiteParameters(const LatticeIterator &site) const
 	{
@@ -375,10 +375,10 @@ public:
 	}
 
 	/**
-	 * @brief Get the position of a lattice site in real space. 
+	 * @brief 获取实空间中格点的位置. 
 	 * 
-	 * @param site Input lattice site. 
-	 * @return geometry::Vec3<double> Position of the lattice site in real space. 
+	 * @param site 输入格点. 
+	 * @return geometry::Vec3<double> 格点在实空间中的位置. 
 	 */
 	geometry::Vec3<double> getSitePosition(const LatticeIterator &site) const
 	{
@@ -387,12 +387,12 @@ public:
 	}
 
 	/**
-	 * @brief Transform a pair of lattice sites (i1,i2) and transform it to (0,i2'). 
-	 * The transformation may involve a permutation of spin components, whose action will be ignored. 
+	 * @brief 变换一对格点 (i1,i2) 并将其变换为 (0,i2'). 
+	 * 该变换可能涉及自旋分量的排列，其作用将被忽略. 
 	 * 
-	 * @param i1 Input lattice site. 
-	 * @param i2 Input lattice site. 
-	 * @return int Representative id of i2'. 
+	 * @param i1 输入格点. 
+	 * @param i2 输入格点. 
+	 * @return int i2'的代表id. 
 	 */
 	int symmetryTransform(const LatticeIterator& i1, const LatticeIterator& i2) const
 	{
@@ -401,13 +401,13 @@ public:
 	}
 
 	/**
-	 * @brief Transform a pair of lattice sites (i1,i2) and transform it to (0,i2'). 
-	 * The transformation may involve a permutation of spin components, in which case the transformation is applied to the spinComponent argument. 
+	 * @brief 变换一对格点 (i1,i2) 并将其变换为 (0,i2'). 
+	 * 变换可能涉及自旋分量的排列，在这种情况下，变换应用于自旋分量参数. 
 	 * 
-	 * @param[in] i1 Input lattice site. 
-	 * @param[in] i2 Input lattice site. 
-	 * @param[out] spinComponent Spin component to transform under the mapping. 
-	 * @return int Representative id of i2'. 
+	 * @param[in] i1 输入格点. 
+	 * @param[in] i2 输入格点. 
+	 * @param[out] spinComponent 自旋组件在映射下进行变换. 
+	 * @return int i2'的代表id. 
 	 */
 	int symmetryTransform(const LatticeIterator &i1, const LatticeIterator &i2, SpinComponent &spinComponent) const
 	{
@@ -417,8 +417,8 @@ public:
 	}
 
 	/**
-	 * @brief Transform a pair of lattice sites (i1,i2) and transform it to (0,i2'). 
-	 * The transformation may involve a permutation of spin components, in which case the transformation is applied to the spinComponent1 and spinComponent2 arguments. 
+	 * @brief 变换一对格点 (i1,i2) 并将其变换为 (0,i2'). 
+	 * 该变换可能涉及自旋分量的排列，在这种情况下，变换将应用于自旋分量 1 和自旋分量 2 参数. 
 	 * 
 	 * @param[in] i1 Input lattice site. 
 	 * @param[in] i2 Input lattice site. 
@@ -474,9 +474,9 @@ public:
 	}
 
 	/**
-	 * @brief List of two-spin correlators (i2,i1), where i1=(0,0,0,0) is the reference site and the list includes all reference sites i2. 
+	 * @brief 双自旋相关器列表 (i2,i1)，其中 i1=(0,0,0,0) 是参考位点，该列表包括所有参考位点 i2. 
 	 * 
-	 * @return const LatticeSiteDescriptor* List of symmetry-reduced two-spin correlators (i1,i2). 
+	 * @return const LatticeSiteDescriptor* 对称性降低的双自旋相关器列表 (i1,i2). 
 	 */
 	const LatticeSiteDescriptor *getInvertedSites() const
 	{
@@ -484,9 +484,9 @@ public:
 	}
 
 	/**
-	 * @brief List of two-spin correlators (i1,i2), where i1=(0,0,0,0) is the reference site and the list includes all reference sites i2. 
+	 * @brief 双自旋相关器列表 (i1,i2)，其中 i1=(0,0,0,0) 是参考位点，该列表包括所有参考位点 i2. 
 	 * 
-	 * @return const LatticeSiteDescriptor* List of symmetry-reduced two-spin correlators (i1,i2). 
+	 * @return const LatticeSiteDescriptor* 对称性降低的双自旋相关器列表 (i1,i2). 
 	 */
 	const LatticeSiteDescriptor *getSites() const
 	{
@@ -494,11 +494,11 @@ public:
 	}
 
 	/**
-	 * @brief Retrieve an iterator over all sites which are within range of the lattice site b, where b must describe one of the basis sites. 
+	 * @brief 检索位于格点 b 范围内的所有点的迭代器，其中 b 必须描述基点之一. 
 	 * @see Lattice::getBasis()
 	 * 
-	 * @param b Iterator to a basis site.  
-	 * @return SublatticeIterator Iterator over all sites in range. 
+	 * @param b 到基础站点的迭代器.  
+	 * @return SublatticeIterator 范围内所有站点的迭代器. 
 	 */
 	SublatticeIterator getRange(const LatticeIterator &b) const
 	{
@@ -511,10 +511,10 @@ public:
 	}
 
 	/**
-	 * @brief Retrieve an iterator over all sites which are within range of the lattice site (0,0,0,b). 
+	 * @brief 检索位于格点 (0,0,0,b) 范围内的所有点的迭代器. 
 	 * 
-	 * @param b Basis site index. 
-	 * @return SublatticeIterator Iterator over all sites in range. 
+	 * @param b 基础站点索引. 
+	 * @return SublatticeIterator 范围内所有站点的迭代器. 
 	 */
 	SublatticeIterator getRange(const int b) const
 	{
@@ -523,30 +523,30 @@ public:
 	}
 
 	/**
-	 * @brief Retrieve iterator over all basis sites. 
+	 * @brief 检索所有基础站点上的迭代器. 
 	 * 
-	 * @return SublatticeIterator Iterator over all basis sites. 
+	 * @return SublatticeIterator 所有基础站点的迭代器. 
 	 */
 	SublatticeIterator getBasis() const
 	{
 		return SublatticeIterator(_bufferBasis);
 	}
 
-	std::vector<geometry::Vec3<double> > _bravaisLattice; ///< List of the three bravais lattice vectors.  
-	std::vector<geometry::Vec3<double> > _basis; ///< List of the positions of all basis sites within a lattice unit cell. 
+	std::vector<geometry::Vec3<double> > _bravaisLattice; ///< 三个布拉维格向量的列表.  
+	std::vector<geometry::Vec3<double> > _basis; ///< 晶格晶胞内所有基点位置的列表. 
 
-	int size; ///< Number representative sites. 
+	int size; ///< 代表站点数量. 
 
 protected: 
-	std::vector<std::tuple<int, int, int, int>> _geometryTable; ///< Internal storage of real space lattice site positions, stored as tuples (a0, a1, a2, b).
+	std::vector<std::tuple<int, int, int, int>> _geometryTable; ///< 实空间晶格位置的内部存储，存储为元组（a0，a1，a2，b）.
 
-	int _dataSize; ///< Total number of all lattice that we store information about (equivalent to size of Lattice::_geometryTable). 
+	int _dataSize; ///< 我们存储信息的所有格子的总数（相当于 Lattice::geometry Table 的大小）. 
 	
-	LatticeSiteDescriptor *_symmetryTable; ///< List of symmetry reductions of spin pairs (id1, id2) linearized as id1*_dataSize+id2. Stores the transformation required to map id1 to zero. 
-	LatticeSiteDescriptor *_bufferSites; ///< List of transformed sites (0, rid), for all representatives rid. 
-	LatticeSiteDescriptor *_bufferInvertedSites; ///< List of transformed sites (rid, 0), for all representatives rid. 
-	LatticeOverlap *_bufferOverlapMatrices; ///< List of lattice overlaps, where the i-th entry is the overlap of the two tuples (0,j)(j,i). 
+	LatticeSiteDescriptor *_symmetryTable; ///< 自旋对 (id1, id2) 的对称性约简列表线性化为 id1* 数据大小+id2。存储将 id1 映射到零所需的转换. 
+	LatticeSiteDescriptor *_bufferSites; ///< 转化位点列表（0，rid），所有代表rid. 
+	LatticeSiteDescriptor *_bufferInvertedSites; ///< 转化位点列表（rid，0），所有代表都rid. 
+	LatticeOverlap *_bufferOverlapMatrices; ///< 晶格重叠列表，其中第 i 个条目是两个元组 (0,j)(j,i) 的重叠. 
 
-	int *_bufferBasis; ///< List of representative ids of all basis sites. 
-	int **_bufferLatticeRange; ///< Table of lists of all site ids in range of site (0,0,0,b). 
+	int *_bufferBasis; ///< 所有基础站点的代表性 ID 列表. 
+	int **_bufferLatticeRange; ///< 站点范围内所有站点 ID 的列表表 (0,0,0,b). 
 };
